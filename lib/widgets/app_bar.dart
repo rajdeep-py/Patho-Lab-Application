@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import '../theme/app_theme.dart';
 
@@ -68,7 +69,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           child: const Icon(IconsaxPlusLinear.arrow_left_1, size: 20),
         ),
-        onPressed: onBackTap ?? () => Navigator.maybePop(context),
+        onPressed: onBackTap ?? () => context.pop(),
       );
     }
 

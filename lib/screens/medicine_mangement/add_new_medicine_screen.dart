@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import 'dart:math';
 import '../../models/medicine.dart';
@@ -11,7 +12,8 @@ class AddNewMedicineScreen extends ConsumerStatefulWidget {
   const AddNewMedicineScreen({super.key});
 
   @override
-  ConsumerState<AddNewMedicineScreen> createState() => _AddNewMedicineScreenState();
+  ConsumerState<AddNewMedicineScreen> createState() =>
+      _AddNewMedicineScreenState();
 }
 
 class _AddNewMedicineScreenState extends ConsumerState<AddNewMedicineScreen> {
@@ -22,7 +24,10 @@ class _AddNewMedicineScreenState extends ConsumerState<AddNewMedicineScreen> {
   final _quantityController = TextEditingController();
   final _compositionController = TextEditingController();
   final _manufacturerController = TextEditingController();
-  final _photoUrlController = TextEditingController(text: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60');
+  final _photoUrlController = TextEditingController(
+    text:
+        'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500&auto=format&fit=crop&q=60',
+  );
 
   @override
   void dispose() {
@@ -70,7 +75,8 @@ class _AddNewMedicineScreenState extends ConsumerState<AddNewMedicineScreen> {
                       label: 'Manufacturer',
                       hint: 'e.g. GSK Pharmaceuticals',
                       icon: IconsaxPlusLinear.building,
-                      validator: (v) => v!.isEmpty ? 'Manufacturer is required' : null,
+                      validator: (v) =>
+                          v!.isEmpty ? 'Manufacturer is required' : null,
                     ),
                     const SizedBox(height: 20),
                     Row(
@@ -83,7 +89,8 @@ class _AddNewMedicineScreenState extends ConsumerState<AddNewMedicineScreen> {
                             prefix: '₹ ',
                             keyboardType: TextInputType.number,
                             icon: IconsaxPlusLinear.wallet,
-                            validator: (v) => v!.isEmpty ? 'Price is required' : null,
+                            validator: (v) =>
+                                v!.isEmpty ? 'Price is required' : null,
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -94,7 +101,8 @@ class _AddNewMedicineScreenState extends ConsumerState<AddNewMedicineScreen> {
                             hint: 'e.g. 10',
                             keyboardType: TextInputType.number,
                             icon: IconsaxPlusLinear.box,
-                            validator: (v) => v!.isEmpty ? 'Quantity is required' : null,
+                            validator: (v) =>
+                                v!.isEmpty ? 'Quantity is required' : null,
                           ),
                         ),
                       ],
@@ -155,7 +163,13 @@ class _AddNewMedicineScreenState extends ConsumerState<AddNewMedicineScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: AppTextStyles.caption.copyWith(fontWeight: FontWeight.bold, color: AppColors.textPrimary)),
+        Text(
+          label,
+          style: AppTextStyles.caption.copyWith(
+            fontWeight: FontWeight.bold,
+            color: AppColors.textPrimary,
+          ),
+        ),
         const SizedBox(height: 8),
         TextFormField(
           controller: controller,
@@ -166,7 +180,10 @@ class _AddNewMedicineScreenState extends ConsumerState<AddNewMedicineScreen> {
             hintText: hint,
             prefixText: prefix,
             prefixIcon: Icon(icon, size: 20),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 12,
+            ),
           ),
         ),
       ],
@@ -187,11 +204,13 @@ class _AddNewMedicineScreenState extends ConsumerState<AddNewMedicineScreen> {
       );
 
       ref.read(medicineProvider.notifier).addToCatalog(newMedicine);
-      
+
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Medicine registered to global catalog successfully!')),
+        const SnackBar(
+          content: Text('Medicine registered to global catalog successfully!'),
+        ),
       );
-      Navigator.pop(context);
+      context.pop();
     }
   }
 }

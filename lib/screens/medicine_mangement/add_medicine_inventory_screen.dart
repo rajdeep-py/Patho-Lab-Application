@@ -225,7 +225,7 @@ class _AddMedicineInventoryScreenState
         ),
       ),
     );
-    Navigator.pop(context);
+    context.pop();
   }
 
   Widget _buildSectionHeader(String title, String subtitle) {

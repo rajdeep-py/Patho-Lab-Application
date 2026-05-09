@@ -72,6 +72,12 @@ class SideNavBar extends ConsumerWidget {
                   onTap: () => _navigateTo(context, '/medicine-management'),
                   isSelected: currentPath == '/medicine-management',
                 ),
+                _NavTile(
+                  icon: IconsaxPlusLinear.add_circle,
+                  label: 'Add Medicines to Inventory',
+                  onTap: () => _navigateTo(context, '/add-new-medicine'),
+                  isSelected: currentPath == '/add-new-medicine',
+                ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Divider(color: AppColors.divider),
@@ -183,7 +189,7 @@ class _NavTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 10),
           decoration: BoxDecoration(
             color: isSelected
                 ? AppColors.primary.withAlpha(25)
