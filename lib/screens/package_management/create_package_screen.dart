@@ -32,6 +32,7 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
   late TextEditingController _deliveryTimeController;
 
   List<String> _selectedTestIds = [];
+  String? _selectedCategoryFilter;
 
   bool get isEdit => widget.package != null;
 
@@ -90,7 +91,13 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
   }
 
   Widget _buildTestSelectionSection() {
-    final availableTests = ref.watch(testProvider);
+    final allTests = ref.watch(testProvider);
+    final categories = allTests.map((t) => t.category).toSet().toList();
+    categories.sort();
+
+    final availableTests = _selectedCategoryFilter == null
+        ? allTests
+        : allTests.where((t) => t.category == _selectedCategoryFilter).toList();
 
     return Container(
       color: AppColors.surface,
@@ -99,12 +106,40 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
           Padding(
             padding: const EdgeInsets.all(24),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Icon(IconsaxPlusLinear.document_filter, color: AppColors.primary),
-                const SizedBox(width: 12),
-                Text(
-                  'Available Lab Tests',
-                  style: AppTextStyles.header.copyWith(fontSize: 20),
+                Row(
+                  children: [
+                    const Icon(IconsaxPlusLinear.document_filter, color: AppColors.primary),
+                    const SizedBox(width: 12),
+                    Text(
+                      'Available Lab Tests',
+                      style: AppTextStyles.header.copyWith(fontSize: 20),
+                    ),
+                  ],
+                ),
+                PopupMenuButton<String?>(
+                  icon: const Icon(IconsaxPlusLinear.filter, color: AppColors.primary),
+                  tooltip: 'Filter by Category',
+                  onSelected: (String? category) {
+                    setState(() {
+                      _selectedCategoryFilter = category;
+                    });
+                  },
+                  itemBuilder: (BuildContext context) {
+                    return [
+                      const PopupMenuItem<String?>(
+                        value: null,
+                        child: Text('All Categories'),
+                      ),
+                      ...categories.map((String category) {
+                        return PopupMenuItem<String?>(
+                          value: category,
+                          child: Text(category),
+                        );
+                      }),
+                    ];
+                  },
                 ),
               ],
             ),
@@ -233,6 +268,20 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
   }
 
   Widget _buildSelectedTestsSection() {
+    final tests = ref.watch(testProvider);
+    final selectedTests = tests.where((t) => _selectedTestIds.contains(t.id)).toList();
+    
+    // Group by category
+    final Map<String, List<dynamic>> groupedSelectedTests = {};
+    for (final test in selectedTests) {
+      if (!groupedSelectedTests.containsKey(test.category)) {
+        groupedSelectedTests[test.category] = [];
+      }
+      groupedSelectedTests[test.category]!.add(test);
+    }
+    
+    final sortedCategories = groupedSelectedTests.keys.toList()..sort();
+
     return Container(
       color: AppColors.background,
       child: Column(
@@ -269,35 +318,59 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
                   )
                 : ListView.builder(
                     padding: const EdgeInsets.all(16),
-                    itemCount: _selectedTestIds.length,
-                    itemBuilder: (context, index) {
-                      final id = _selectedTestIds[index];
-                      final tests = ref.watch(testProvider);
-                      try {
-                        final test = tests.firstWhere((t) => t.id == id);
-                        return Container(
-                          margin: const EdgeInsets.only(bottom: 12),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withAlpha(20),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.primary.withAlpha(50)),
-                          ),
-                          child: ListTile(
-                            title: Text(test.name, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
-                            subtitle: Text('₹${test.price.toStringAsFixed(0)}', style: TextStyle(color: AppColors.primary.withAlpha(200))),
-                            trailing: IconButton(
-                              icon: const Icon(IconsaxPlusLinear.close_circle, color: AppColors.primary),
-                              onPressed: () {
-                                setState(() {
-                                  _selectedTestIds.remove(id);
-                                });
-                              },
+                    itemCount: sortedCategories.length,
+                    itemBuilder: (context, catIndex) {
+                      final category = sortedCategories[catIndex];
+                      final catTests = groupedSelectedTests[category]!;
+                      
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8, bottom: 12, top: 8),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 4,
+                                  height: 16,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(2),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  category,
+                                  style: AppTextStyles.cardTitle.copyWith(fontSize: 16),
+                                ),
+                              ],
                             ),
                           ),
-                        ).animate().fadeIn(duration: 300.ms).slideX(begin: 0.1);
-                      } catch (_) {
-                        return const SizedBox.shrink();
-                      }
+                          ...catTests.map((test) {
+                            return Container(
+                              margin: const EdgeInsets.only(bottom: 12),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withAlpha(20),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: AppColors.primary.withAlpha(50)),
+                              ),
+                              child: ListTile(
+                                title: Text(test.name, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.bold)),
+                                subtitle: Text('₹${test.price.toStringAsFixed(0)}', style: TextStyle(color: AppColors.primary.withAlpha(200))),
+                                trailing: IconButton(
+                                  icon: const Icon(IconsaxPlusLinear.close_circle, color: AppColors.primary),
+                                  onPressed: () {
+                                    setState(() {
+                                      _selectedTestIds.remove(test.id);
+                                    });
+                                  },
+                                ),
+                              ),
+                            ).animate().fadeIn(duration: 300.ms).slideX(begin: 0.1);
+                          }),
+                          const SizedBox(height: 8),
+                        ],
+                      );
                     },
                   ),
           ),

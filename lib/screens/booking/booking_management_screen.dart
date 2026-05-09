@@ -16,8 +16,11 @@ class BookingManagementScreen extends ConsumerWidget {
     final filteredBookings = bookingState.bookings.where((booking) {
       bool matchesDate = true;
       if (bookingState.startDate != null && bookingState.endDate != null) {
-        matchesDate = booking.bookingDate.isAfter(bookingState.startDate!) &&
-            booking.bookingDate.isBefore(bookingState.endDate!.add(const Duration(days: 1)));
+        matchesDate =
+            booking.bookingDate.isAfter(bookingState.startDate!) &&
+            booking.bookingDate.isBefore(
+              bookingState.endDate!.add(const Duration(days: 1)),
+            );
       }
 
       bool matchesStatus = true;
@@ -31,7 +34,7 @@ class BookingManagementScreen extends ConsumerWidget {
     return Scaffold(
       drawer: const SideNavBar(),
       appBar: const CustomAppBar(
-        title: 'Test Bookings',
+        title: 'Order Management',
         subtitle: 'Manage appointments and results',
         showMenuButton: true,
       ),
@@ -48,7 +51,7 @@ class BookingManagementScreen extends ConsumerWidget {
             children: [
               const BookingFilterCard(),
               const SizedBox(height: 32),
-              
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -59,7 +62,7 @@ class BookingManagementScreen extends ConsumerWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              
+
               if (filteredBookings.isEmpty)
                 Center(
                   child: Column(
@@ -67,10 +70,17 @@ class BookingManagementScreen extends ConsumerWidget {
                       const SizedBox(height: 60),
                       Opacity(
                         opacity: 0.5,
-                        child: Icon(Icons.calendar_today_outlined, size: 64, color: AppColors.textTertiary),
+                        child: Icon(
+                          Icons.calendar_today_outlined,
+                          size: 64,
+                          color: AppColors.textTertiary,
+                        ),
                       ),
                       const SizedBox(height: 16),
-                      Text('No bookings found for the selected filters', style: AppTextStyles.description),
+                      Text(
+                        'No bookings found for the selected filters',
+                        style: AppTextStyles.description,
+                      ),
                     ],
                   ),
                 )
