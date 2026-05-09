@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../models/test.dart';
 import '../../theme/app_theme.dart';
 import '../../cards/test_management/test_header_card.dart';
@@ -9,6 +10,7 @@ import '../../cards/test_management/test_description_card.dart';
 import '../../cards/test_management/test_precautions_card.dart';
 import '../../cards/test_management/test_collection_delivery_card.dart';
 import '../../providers/test_provider.dart';
+import '../../widgets/app_bar.dart';
 
 class TestDetailsScreen extends ConsumerWidget {
   final LabTest test;
@@ -24,17 +26,10 @@ class TestDetailsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Test Details', style: AppTextStyles.subHeader.copyWith(fontSize: 20)),
-            Text(updatedTest.name, style: AppTextStyles.caption),
-          ],
-        ),
+      appBar: CustomAppBar(
+        title: 'Test Details',
+        subtitle: updatedTest.name,
+        showBackButton: true,
         actions: [
           IconButton(
             icon: const Icon(IconsaxPlusLinear.trash, color: AppColors.error),
@@ -49,9 +44,9 @@ class TestDetailsScreen extends ConsumerWidget {
         child: Column(
           children: [
             TestHeaderCard(test: updatedTest),
-            TestDescriptionCard(test: updatedTest),
-            TestPrecautionsCard(test: updatedTest),
-            TestCollectionDeliveryCard(test: updatedTest),
+            TestDescriptionCard(test: updatedTest).animate().fadeIn(duration: 400.ms, delay: 100.ms).slideY(begin: 0.1),
+            TestPrecautionsCard(test: updatedTest).animate().fadeIn(duration: 400.ms, delay: 150.ms).slideY(begin: 0.1),
+            TestCollectionDeliveryCard(test: updatedTest).animate().fadeIn(duration: 400.ms, delay: 200.ms).slideY(begin: 0.1),
           ],
         ),
       ),

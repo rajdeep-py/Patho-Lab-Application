@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:patho_lab_panel/widgets/app_bar.dart';
 import '../../providers/package_provider.dart';
 import '../../theme/app_theme.dart';
 import '../../cards/package/package_search_card.dart';
@@ -18,17 +20,10 @@ class PackageManagementScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       drawer: const SideNavBar(),
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Package Management', style: AppTextStyles.header.copyWith(fontSize: 20)),
-            Text('Manage health packages', style: AppTextStyles.caption),
-          ],
-        ),
+      appBar: CustomAppBar(
+        title: 'Package Management',
+        subtitle: 'Manage health packages',
+        showMenuButton: true,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
@@ -49,7 +44,7 @@ class PackageManagementScreen extends ConsumerWidget {
       ),
       body: Column(
         children: [
-          const PackageSearchCard(),
+          const PackageSearchCard().animate().fadeIn(duration: 400.ms, delay: 100.ms).slideY(begin: 0.1),
           Expanded(
             child: packages.isEmpty
                 ? const Center(

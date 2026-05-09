@@ -33,14 +33,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       leading: _buildLeading(context),
       title: Column(
-        crossAxisAlignment: centerTitle ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+        crossAxisAlignment: centerTitle
+            ? CrossAxisAlignment.center
+            : CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: AppTextStyles.subHeader.copyWith(
-              fontSize: 20,
-              height: 1.2,
-            ),
+            style: AppTextStyles.subHeader.copyWith(fontSize: 20, height: 1.2),
           ),
           if (subtitle != null)
             Text(
@@ -53,10 +52,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
         ],
       ),
-      actions: [
-        if (actions != null) ...actions!,
-        const SizedBox(width: 8),
-      ],
+      actions: [if (actions != null) ...actions!, const SizedBox(width: 8)],
     );
   }
 
@@ -85,7 +81,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: AppColors.divider),
           ),
-          child: const Icon(IconsaxPlusLinear.menu_1, size: 20),
+          child: const Icon(IconsaxPlusLinear.menu, size: 20),
         ),
         onPressed: onMenuTap ?? () => Scaffold.of(context).openDrawer(),
       );

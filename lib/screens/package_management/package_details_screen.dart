@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../models/package.dart';
 import '../../providers/package_provider.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/app_bar.dart';
 
 class PackageDetailsScreen extends ConsumerWidget {
   final LabPackage package;
@@ -24,14 +26,9 @@ class PackageDetailsScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
-        title: Text(
-          'Package Details',
-          style: AppTextStyles.subHeader.copyWith(fontSize: 20),
-        ),
+      appBar: CustomAppBar(
+        title: 'Package Details',
+        showBackButton: true,
         actions: [
           IconButton(
             icon: const Icon(IconsaxPlusLinear.edit_2, color: AppColors.primary),
@@ -67,41 +64,101 @@ class PackageDetailsScreen extends ConsumerWidget {
         horizontal: AppSpacing.screenPadding,
         vertical: AppSpacing.elementGap,
       ),
-      decoration: AppCardStyles.sleekCard,
-      padding: const EdgeInsets.all(AppSpacing.cardPadding),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(AppSpacing.elementGap),
-            child: Container(
-              height: 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                image: _getDecorationImage(pkg.photoUrl),
-                color: AppColors.blush,
-              ),
-              child: _getDecorationImage(pkg.photoUrl) == null
-                  ? const Icon(
-                      IconsaxPlusLinear.box,
-                      color: AppColors.textTertiary,
-                      size: 50,
-                    )
-                  : null,
-            ),
-          ),
-          const SizedBox(height: AppSpacing.elementGap),
-          Text(pkg.name, style: AppTextStyles.header.copyWith(fontSize: 24)),
-          const SizedBox(height: 8),
-          Text(
-            '₹${pkg.price.toStringAsFixed(2)}',
-            style: AppTextStyles.subHeader.copyWith(
-              color: AppColors.primaryAccent,
-            ),
+      height: 320,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(40),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
           ),
         ],
       ),
-    );
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Hero(
+              tag: 'package_image_${pkg.id}',
+              child: Container(
+                decoration: BoxDecoration(
+                  image: _getDecorationImage(pkg.photoUrl),
+                  color: AppColors.darkCyan,
+                ),
+                child: _getDecorationImage(pkg.photoUrl) == null
+                    ? const Icon(
+                        IconsaxPlusLinear.box,
+                        color: Colors.white54,
+                        size: 50,
+                      )
+                    : null,
+              ),
+            ),
+            // Gradient Overlay
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withAlpha(0),
+                    Colors.black.withAlpha(80),
+                    Colors.black.withAlpha(200),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            ),
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.secondaryCyan.withAlpha(80),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.secondaryCyan.withAlpha(100)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(IconsaxPlusLinear.health, color: Colors.white, size: 14),
+                        const SizedBox(width: 6),
+                        Text(
+                          '${pkg.labTestIds.length} TESTS INCLUDED',
+                          style: AppTextStyles.tagline.copyWith(color: Colors.white, fontSize: 10, letterSpacing: 1.0),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    pkg.name,
+                    style: AppTextStyles.header.copyWith(fontSize: 28, color: Colors.white, height: 1.1),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '₹${pkg.price.toStringAsFixed(2)}',
+                    style: AppTextStyles.subHeader.copyWith(
+                      color: AppColors.primary,
+                      fontSize: 24,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1);
   }
 
   Widget _buildDescriptionCard(LabPackage pkg) {
@@ -120,7 +177,7 @@ class PackageDetailsScreen extends ConsumerWidget {
           Text(pkg.description, style: AppTextStyles.description),
         ],
       ),
-    );
+    ).animate().fadeIn(duration: 400.ms, delay: 100.ms).slideY(begin: 0.1);
   }
 
   Widget _buildLabTestsIncluded(LabPackage pkg, List<dynamic> allTests) {
@@ -210,7 +267,7 @@ class PackageDetailsScreen extends ConsumerWidget {
             }),
         ],
       ),
-    );
+    ).animate().fadeIn(duration: 400.ms, delay: 150.ms).slideY(begin: 0.1);
   }
 
   Widget _buildCollectionDeliveryCard(LabPackage pkg) {
@@ -236,7 +293,7 @@ class PackageDetailsScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
+    ).animate().fadeIn(duration: 400.ms, delay: 200.ms).slideY(begin: 0.1);
   }
 
   Widget _buildRow(IconData icon, String title, String value) {

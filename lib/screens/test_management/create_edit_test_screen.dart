@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../models/test.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/app_bar.dart';
 
 class CreateEditTestScreen extends ConsumerStatefulWidget {
   final LabTest? test;
@@ -129,14 +131,9 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
-        title: Text(
-          isEdit ? 'Edit Lab Test' : 'Create New Lab Test',
-          style: AppTextStyles.subHeader,
-        ),
+      appBar: CustomAppBar(
+        title: isEdit ? 'Edit Lab Test' : 'Create New Lab Test',
+        showBackButton: true,
         actions: [
           IconButton(
             icon: const Icon(
@@ -152,87 +149,132 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.screenPadding),
           children: [
-            _buildSectionTitle('Basic Information'),
-            _buildTextField(
-              _nameController,
-              'Test Name',
-              IconsaxPlusLinear.activity,
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(
-              _categoryController,
-              'Category (e.g. Blood Test)',
-              IconsaxPlusLinear.category,
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(
-              _priceController,
-              'Price',
-              IconsaxPlusLinear.wallet_2,
-              isNumeric: true,
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildTextField(
-                    _photoUrlController,
-                    'Photo Path (or pick an image)',
-                    IconsaxPlusLinear.gallery,
+            Container(
+              decoration: AppCardStyles.sleekCard,
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              margin: const EdgeInsets.only(bottom: AppSpacing.elementGap),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionTitle('Basic Information'),
+                  _buildTextField(
+                    _nameController,
+                    'Test Name',
+                    IconsaxPlusLinear.activity,
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(
-                    IconsaxPlusLinear.document_upload,
-                    color: AppColors.primary,
+                  const SizedBox(height: AppSpacing.elementGap),
+                  _buildTextField(
+                    _categoryController,
+                    'Category (e.g. Blood Test)',
+                    IconsaxPlusLinear.category,
                   ),
-                  onPressed: _pickImage,
-                ),
-              ],
-            ),
+                  const SizedBox(height: AppSpacing.elementGap),
+                  _buildTextField(
+                    _priceController,
+                    'Price',
+                    IconsaxPlusLinear.wallet_2,
+                    isNumeric: true,
+                  ),
+                  const SizedBox(height: AppSpacing.elementGap),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildTextField(
+                          _photoUrlController,
+                          'Photo Path (or pick an image)',
+                          IconsaxPlusLinear.gallery,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          IconsaxPlusLinear.document_upload,
+                          color: AppColors.primary,
+                        ),
+                        onPressed: _pickImage,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
 
-            const SizedBox(height: AppSpacing.sectionGap),
-            _buildSectionTitle('Detailed Description'),
-            _buildTextField(
-              _descriptionController,
-              'Description',
-              IconsaxPlusLinear.document_text,
-              maxLines: 3,
-            ),
+            Container(
+              decoration: AppCardStyles.sleekCard,
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              margin: const EdgeInsets.only(bottom: AppSpacing.elementGap),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionTitle('Detailed Description'),
+                  _buildTextField(
+                    _descriptionController,
+                    'Description',
+                    IconsaxPlusLinear.document_text,
+                    maxLines: 3,
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(duration: 400.ms, delay: 100.ms).slideY(begin: 0.1),
 
-            const SizedBox(height: AppSpacing.sectionGap),
-            _buildSectionTitle('Parameters Included'),
-            _buildListEditor('Parameter', _parameters, _paramController),
+            Container(
+              decoration: AppCardStyles.sleekCard,
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              margin: const EdgeInsets.only(bottom: AppSpacing.elementGap),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionTitle('Parameters Included'),
+                  _buildListEditor('Parameter', _parameters, _paramController),
+                ],
+              ),
+            ).animate().fadeIn(duration: 400.ms, delay: 150.ms).slideY(begin: 0.1),
 
-            const SizedBox(height: AppSpacing.sectionGap),
-            _buildSectionTitle('Precautions'),
-            _buildListEditor('Precaution', _precautions, _precautionController),
+            Container(
+              decoration: AppCardStyles.sleekCard,
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              margin: const EdgeInsets.only(bottom: AppSpacing.elementGap),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionTitle('Precautions'),
+                  _buildListEditor('Precaution', _precautions, _precautionController),
+                ],
+              ),
+            ).animate().fadeIn(duration: 400.ms, delay: 200.ms).slideY(begin: 0.1),
 
-            const SizedBox(height: AppSpacing.sectionGap),
-            _buildSectionTitle('Collection & Delivery'),
-            _buildTextField(
-              _sampleTypeController,
-              'Sample Type',
-              IconsaxPlusLinear.drop,
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(
-              _sampleTimeController,
-              'Sample Collection Time',
-              IconsaxPlusLinear.timer,
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(
-              _deliveryTimeController,
-              'Report Delivery Time',
-              IconsaxPlusLinear.truck_fast,
-            ),
+            Container(
+              decoration: AppCardStyles.sleekCard,
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              margin: const EdgeInsets.only(bottom: AppSpacing.sectionGap),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionTitle('Collection & Delivery'),
+                  _buildTextField(
+                    _sampleTypeController,
+                    'Sample Type',
+                    IconsaxPlusLinear.drop,
+                  ),
+                  const SizedBox(height: AppSpacing.elementGap),
+                  _buildTextField(
+                    _sampleTimeController,
+                    'Sample Collection Time',
+                    IconsaxPlusLinear.timer,
+                  ),
+                  const SizedBox(height: AppSpacing.elementGap),
+                  _buildTextField(
+                    _deliveryTimeController,
+                    'Report Delivery Time',
+                    IconsaxPlusLinear.truck_fast,
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(duration: 400.ms, delay: 250.ms).slideY(begin: 0.1),
 
-            const SizedBox(height: 32),
             ElevatedButton(
               onPressed: _saveTest,
               child: Text(isEdit ? 'Update Lab Test' : 'Create Lab Test'),
-            ),
+            ).animate().fadeIn(duration: 400.ms, delay: 300.ms).slideY(begin: 0.1),
             const SizedBox(height: AppSpacing.sectionGap),
           ],
         ),

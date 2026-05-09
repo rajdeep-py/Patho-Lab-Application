@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../models/test.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
@@ -33,87 +34,138 @@ class _TestHeaderCardState extends ConsumerState<TestHeaderCard> {
         horizontal: AppSpacing.screenPadding,
         vertical: AppSpacing.elementGap,
       ),
-      decoration: AppCardStyles.sleekCard,
-      child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.cardPadding),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+      height: 320,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha(40),
+            blurRadius: 30,
+            offset: const Offset(0, 10),
+          ),
+        ],
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(24),
+        child: Stack(
+          fit: StackFit.expand,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary.withAlpha(25),
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.primary.withAlpha(50)),
-                  ),
-                  child: Text(
-                    widget.test.category.toUpperCase(),
-                    style: AppTextStyles.tagline,
-                  ),
-                ),
-                IconButton(
-                  icon: const Icon(
-                    IconsaxPlusLinear.edit_2,
-                    color: AppColors.primary,
-                  ),
-                  onPressed: _editHeader,
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            ClipRRect(
-              borderRadius: BorderRadius.circular(AppSpacing.elementGap),
+            Hero(
+              tag: 'test_image_${widget.test.id}',
               child: _buildTestImage(widget.test.photoUrl),
             ),
-            const SizedBox(height: AppSpacing.elementGap),
-            Text(
-              widget.test.name,
-              style: AppTextStyles.header.copyWith(fontSize: 24),
+            // Gradient Overlay
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withAlpha(0),
+                    Colors.black.withAlpha(80),
+                    Colors.black.withAlpha(200),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
             ),
-            const SizedBox(height: 8),
-            Text(
-              '₹${widget.test.price.toStringAsFixed(2)}',
-              style: AppTextStyles.subHeader.copyWith(
-                color: AppColors.primaryAccent,
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withAlpha(80),
+                                borderRadius: BorderRadius.circular(20),
+                                border: Border.all(
+                                  color: AppColors.primary.withAlpha(100),
+                                ),
+                              ),
+                              child: Text(
+                                widget.test.category.toUpperCase(),
+                                style: AppTextStyles.tagline.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  letterSpacing: 1.0,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              widget.test.name,
+                              style: AppTextStyles.header.copyWith(
+                                fontSize: 28,
+                                color: Colors.white,
+                                height: 1.1,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              '₹${widget.test.price.toStringAsFixed(2)}',
+                              style: AppTextStyles.subHeader.copyWith(
+                                color: AppColors.primary,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          IconsaxPlusLinear.edit_2,
+                          color: Colors.white,
+                        ),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.white.withAlpha(40),
+                        ),
+                        onPressed: _editHeader,
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ),
-    );
+    ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1);
   }
 
   Widget _buildErrorImage() {
     return Container(
       width: double.infinity,
       height: 200,
-      color: AppColors.blush,
-      child: const Icon(IconsaxPlusLinear.activity, color: AppColors.textTertiary, size: 50),
+      color: AppColors.darkCyan,
+      child: const Icon(
+        IconsaxPlusLinear.activity,
+        color: Colors.white54,
+        size: 50,
+      ),
     );
   }
 
   Widget _buildTestImage(String url) {
     if (url.startsWith('http')) {
-      return Image.network(
-        url,
-        width: double.infinity,
-        height: 200,
-        fit: BoxFit.cover,
-        errorBuilder: _errorBuilder,
-      );
+      return Image.network(url, fit: BoxFit.cover, errorBuilder: _errorBuilder);
     } else if (url.startsWith('data:image')) {
       try {
         final base64Str = url.split(',').last;
         return Image.memory(
           base64Decode(base64Str),
-          width: double.infinity,
-          height: 200,
           fit: BoxFit.cover,
           errorBuilder: _errorBuilder,
         );
@@ -126,8 +178,6 @@ class _TestHeaderCardState extends ConsumerState<TestHeaderCard> {
       }
       return Image.file(
         File(url),
-        width: double.infinity,
-        height: 200,
         fit: BoxFit.cover,
         errorBuilder: _errorBuilder,
       );

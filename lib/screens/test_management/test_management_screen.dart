@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:patho_lab_panel/widgets/app_bar.dart';
 import 'package:patho_lab_panel/widgets/side_nav_bar.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
@@ -16,29 +19,23 @@ class TestManagementScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.background,
       drawer: const SideNavBar(),
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: const [
-            Text('Test Management', style: AppTextStyles.subHeader),
-            Text('Manage all lab tests', style: AppTextStyles.caption),
-          ],
-        ),
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
+      appBar: CustomAppBar(
+        title: 'Test Management',
+        subtitle: 'Manage all lab tests',
+        showMenuButton: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.download_rounded, color: AppColors.primary),
-            onPressed: () {
-              // Handle download action
-            },
+            icon: const Icon(IconsaxPlusLinear.notification),
+            onPressed: () {},
           ),
         ],
       ),
       body: Column(
         children: [
-          const TestSearchFilterCard(),
+          const TestSearchFilterCard()
+              .animate()
+              .fadeIn(duration: 400.ms, delay: 100.ms)
+              .slideY(begin: 0.1),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.only(bottom: AppSpacing.sectionGap),

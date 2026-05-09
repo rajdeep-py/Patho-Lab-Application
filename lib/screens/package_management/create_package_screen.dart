@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import '../../models/package.dart';
 import '../../providers/package_provider.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
+import '../../widgets/app_bar.dart';
 
 class CreatePackageScreen extends ConsumerStatefulWidget {
   final LabPackage? package;
@@ -186,14 +188,9 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: AppColors.surface,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: AppColors.textPrimary),
-        title: Text(
-          isEdit ? 'Edit Package' : 'Create Package',
-          style: AppTextStyles.subHeader,
-        ),
+      appBar: CustomAppBar(
+        title: isEdit ? 'Edit Package' : 'Create Package',
+        showBackButton: true,
         actions: [
           IconButton(
             icon: const Icon(
@@ -209,117 +206,147 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
         child: ListView(
           padding: const EdgeInsets.all(AppSpacing.screenPadding),
           children: [
-            const Text('Basic Information', style: AppTextStyles.cardTitle),
-            const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(
-              _nameController,
-              'Package Name',
-              IconsaxPlusLinear.box,
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(
-              _priceController,
-              'Price',
-              IconsaxPlusLinear.wallet_2,
-              isNumeric: true,
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(
-              _descriptionController,
-              'Description',
-              IconsaxPlusLinear.document_text,
-              maxLines: 3,
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            Row(
-              children: [
-                Expanded(
-                  child: _buildTextField(
-                    _photoUrlController,
-                    'Photo Path (or pick an image)',
-                    IconsaxPlusLinear.gallery,
+            // Basic Information Card
+            Container(
+              decoration: AppCardStyles.sleekCard,
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              margin: const EdgeInsets.only(bottom: AppSpacing.elementGap),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Basic Information', style: AppTextStyles.cardTitle),
+                  const SizedBox(height: AppSpacing.elementGap),
+                  _buildTextField(
+                    _nameController,
+                    'Package Name',
+                    IconsaxPlusLinear.box,
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(
-                    IconsaxPlusLinear.document_upload,
-                    color: AppColors.primary,
+                  const SizedBox(height: AppSpacing.elementGap),
+                  _buildTextField(
+                    _priceController,
+                    'Price',
+                    IconsaxPlusLinear.wallet_2,
+                    isNumeric: true,
                   ),
-                  onPressed: _pickImage,
-                ),
-              ],
-            ),
-
-            const SizedBox(height: AppSpacing.sectionGap),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text(
-                  'Lab Tests Included',
-                  style: AppTextStyles.cardTitle,
-                ),
-                TextButton.icon(
-                  onPressed: _showTestSelectionDialog,
-                  icon: const Icon(IconsaxPlusLinear.add),
-                  label: const Text('Add Tests'),
-                ),
-              ],
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            if (_selectedTestIds.isEmpty)
-              const Text(
-                'No tests selected yet.',
-                style: AppTextStyles.description,
-              )
-            else
-              ..._selectedTestIds.map((id) {
-                final tests = ref.watch(testProvider);
-                try {
-                  final test = tests.firstWhere((t) => t.id == id);
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: const Icon(
-                      IconsaxPlusBold.tick_circle,
-                      color: AppColors.primary,
-                    ),
-                    title: Text(test.name, style: AppTextStyles.description),
-                    trailing: IconButton(
-                      icon: const Icon(
-                        IconsaxPlusLinear.minus_cirlce,
-                        color: AppColors.error,
+                  const SizedBox(height: AppSpacing.elementGap),
+                  _buildTextField(
+                    _descriptionController,
+                    'Description',
+                    IconsaxPlusLinear.document_text,
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: AppSpacing.elementGap),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _buildTextField(
+                          _photoUrlController,
+                          'Photo Path (or pick an image)',
+                          IconsaxPlusLinear.gallery,
+                        ),
                       ),
-                      onPressed: () {
-                        setState(() {
-                          _selectedTestIds.remove(id);
-                        });
-                      },
-                    ),
-                  );
-                } catch (_) {
-                  return const SizedBox.shrink();
-                }
-              }),
+                      IconButton(
+                        icon: const Icon(
+                          IconsaxPlusLinear.document_upload,
+                          color: AppColors.primary,
+                        ),
+                        onPressed: _pickImage,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(duration: 400.ms).slideY(begin: 0.1),
 
-            const SizedBox(height: AppSpacing.sectionGap),
-            const Text('Collection & Delivery', style: AppTextStyles.cardTitle),
-            const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(
-              _sampleTimeController,
-              'Sample Collection Time',
-              IconsaxPlusLinear.timer,
-            ),
-            const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(
-              _deliveryTimeController,
-              'Report Delivery Time',
-              IconsaxPlusLinear.truck_fast,
-            ),
+            // Lab Tests Included Card
+            Container(
+              decoration: AppCardStyles.sleekCard,
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              margin: const EdgeInsets.only(bottom: AppSpacing.elementGap),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Lab Tests Included',
+                        style: AppTextStyles.cardTitle,
+                      ),
+                      TextButton.icon(
+                        onPressed: _showTestSelectionDialog,
+                        icon: const Icon(IconsaxPlusLinear.add),
+                        label: const Text('Add Tests'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: AppSpacing.elementGap),
+                  if (_selectedTestIds.isEmpty)
+                    const Text(
+                      'No tests selected yet.',
+                      style: AppTextStyles.description,
+                    )
+                  else
+                    ..._selectedTestIds.map((id) {
+                      final tests = ref.watch(testProvider);
+                      try {
+                        final test = tests.firstWhere((t) => t.id == id);
+                        return ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: const Icon(
+                            IconsaxPlusBold.tick_circle,
+                            color: AppColors.success,
+                          ),
+                          title: Text(test.name, style: AppTextStyles.description),
+                          trailing: IconButton(
+                            icon: const Icon(
+                              IconsaxPlusLinear.minus_cirlce,
+                              color: AppColors.error,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _selectedTestIds.remove(id);
+                              });
+                            },
+                          ),
+                        );
+                      } catch (_) {
+                        return const SizedBox.shrink();
+                      }
+                    }),
+                ],
+              ),
+            ).animate().fadeIn(duration: 400.ms, delay: 100.ms).slideY(begin: 0.1),
 
-            const SizedBox(height: 32),
+            // Collection & Delivery Card
+            Container(
+              decoration: AppCardStyles.sleekCard,
+              padding: const EdgeInsets.all(AppSpacing.cardPadding),
+              margin: const EdgeInsets.only(bottom: AppSpacing.sectionGap),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Collection & Delivery', style: AppTextStyles.cardTitle),
+                  const SizedBox(height: AppSpacing.elementGap),
+                  _buildTextField(
+                    _sampleTimeController,
+                    'Sample Collection Time',
+                    IconsaxPlusLinear.timer,
+                  ),
+                  const SizedBox(height: AppSpacing.elementGap),
+                  _buildTextField(
+                    _deliveryTimeController,
+                    'Report Delivery Time',
+                    IconsaxPlusLinear.truck_fast,
+                  ),
+                ],
+              ),
+            ).animate().fadeIn(duration: 400.ms, delay: 200.ms).slideY(begin: 0.1),
+
             ElevatedButton(
               onPressed: _savePackage,
               child: Text(isEdit ? 'Update Package' : 'Create Package'),
-            ),
+            ).animate().fadeIn(duration: 400.ms, delay: 300.ms).slideY(begin: 0.1),
             const SizedBox(height: AppSpacing.sectionGap),
           ],
         ),
