@@ -85,9 +85,6 @@ class SideNavBar extends ConsumerWidget {
               ],
             ),
           ),
-
-          // Logout Section
-          _buildLogout(ref),
         ],
       ),
     );
@@ -148,37 +145,6 @@ class SideNavBar extends ConsumerWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildLogout(WidgetRef ref) {
-    return Padding(
-      padding: const EdgeInsets.all(24),
-      child: InkWell(
-        onTap: () => ref.read(authProvider.notifier).logout(),
-        borderRadius: BorderRadius.circular(12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          decoration: BoxDecoration(
-            color: AppColors.errorLight.withAlpha(100),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Row(
-            children: [
-              Icon(IconsaxPlusLinear.logout, color: AppColors.error, size: 20),
-              SizedBox(width: 12),
-              Text(
-                'Logout',
-                style: TextStyle(
-                  color: AppColors.error,
-                  fontWeight: FontWeight.w600,
-                  fontFamily: 'Lexend',
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }

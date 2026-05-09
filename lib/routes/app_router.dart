@@ -9,7 +9,11 @@ import '../screens/profile/profile_screen.dart';
 import '../screens/earning/earning_screen.dart';
 import '../screens/earning/earning_details_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
+import '../screens/package_management/package_management_screen.dart';
+import '../screens/package_management/package_details_screen.dart';
+import '../screens/package_management/create_package_screen.dart';
 import '../models/test.dart';
+import '../models/package.dart';
 import '../models/earning.dart';
 
 class AppRouter {
@@ -23,6 +27,9 @@ class AppRouter {
   static const String earnings = '/payments';
   static const String earningDetails = '/earning-details';
   static const String createEditTest = '/create-edit-test';
+  static const String packageManagement = '/package-management';
+  static const String packageDetails = '/package-details';
+  static const String createPackage = '/create-package';
   static final router = GoRouter(
     initialLocation: splash,
     routes: [
@@ -49,6 +56,24 @@ class AppRouter {
         builder: (context, state) {
           final test = state.extra as LabTest?;
           return CreateEditTestScreen(test: test);
+        },
+      ),
+      GoRoute(
+        path: packageManagement,
+        builder: (context, state) => const PackageManagementScreen(),
+      ),
+      GoRoute(
+        path: packageDetails,
+        builder: (context, state) {
+          final package = state.extra as LabPackage;
+          return PackageDetailsScreen(package: package);
+        },
+      ),
+      GoRoute(
+        path: createPackage,
+        builder: (context, state) {
+          final package = state.extra as LabPackage?;
+          return CreatePackageScreen(package: package);
         },
       ),
       GoRoute(
