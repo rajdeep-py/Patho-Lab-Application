@@ -14,6 +14,14 @@ class EarningState {
     this.monthFilter,
   });
 
+  double get totalToBePaid => earnings
+      .where((e) => e.type == EarningType.toBePaid)
+      .fold(0, (sum, e) => sum + e.orderAmount);
+
+  double get totalToBeClaimed => earnings
+      .where((e) => e.type == EarningType.toBeClaimed)
+      .fold(0, (sum, e) => sum + e.orderAmount);
+
   EarningState copyWith({
     List<Earning>? earnings,
     bool? isLoading,
@@ -31,44 +39,97 @@ class EarningState {
 
 class EarningNotifier extends StateNotifier<EarningState> {
   EarningNotifier()
-    : super(
-        EarningState(
-          earnings: [],
-          yearFilter: DateTime.now().year,
-          monthFilter: DateTime.now().month,
-        ),
-      ) {
+      : super(
+          EarningState(
+            earnings: [],
+            yearFilter: DateTime.now().year,
+            monthFilter: DateTime.now().month,
+          ),
+        ) {
     _loadDummyData();
   }
 
   void _loadDummyData() {
+    final now = DateTime.now();
     final dummyEarnings = [
-      Earning(
-        id: 'PAY-2024-001',
-        periodStart: DateTime(2024, 1, 1),
-        periodEnd: DateTime(2024, 1, 31),
-        totalAmount: 45000,
-        status: EarningStatus.paid,
-        bookingIds: ['BK-1001', 'BK-1002', 'BK-1003'],
+      _createEarning(
+        'PAY-001',
+        'BK-1001',
+        1500,
+        EarningStatus.paid,
+        EarningType.toBePaid,
+        now.subtract(const Duration(days: 2)),
+        'John Doe',
+        'Complete Blood Count',
       ),
-      Earning(
-        id: 'PAY-2024-002',
-        periodStart: DateTime(2024, 2, 1),
-        periodEnd: DateTime(2024, 2, 28),
-        totalAmount: 52000,
-        status: EarningStatus.paid,
-        bookingIds: ['BK-1004', 'BK-1005'],
+      _createEarning(
+        'PAY-002',
+        'BK-1002',
+        2500,
+        EarningStatus.paid,
+        EarningType.toBeClaimed,
+        now.subtract(const Duration(days: 5)),
+        'Jane Smith',
+        'Lipid Profile',
       ),
-      Earning(
-        id: 'PAY-2024-003',
-        periodStart: DateTime(2024, 3, 1),
-        periodEnd: DateTime(2024, 3, 31),
-        totalAmount: 12500,
-        status: EarningStatus.pending,
-        bookingIds: ['BK-1006'],
+      _createEarning(
+        'PAY-003',
+        'BK-1003',
+        1200,
+        EarningStatus.pending,
+        EarningType.toBePaid,
+        now.subtract(const Duration(days: 1)),
+        'Robert Brown',
+        'Thyroid Test',
+      ),
+      _createEarning(
+        'PAY-004',
+        'BK-1004',
+        3500,
+        EarningStatus.paid,
+        EarningType.toBeClaimed,
+        now.subtract(const Duration(days: 10)),
+        'Alice Johnson',
+        'Diabetes Screen',
+      ),
+      _createEarning(
+        'PAY-005',
+        'BK-1005',
+        800,
+        EarningStatus.pending,
+        EarningType.toBePaid,
+        now,
+        'Michael Wilson',
+        'Urine Analysis',
       ),
     ];
     state = state.copyWith(earnings: dummyEarnings);
+  }
+
+  Earning _createEarning(
+    String id,
+    String bookingId,
+    double amount,
+    EarningStatus status,
+    EarningType type,
+    DateTime date,
+    String customerName,
+    String serviceName,
+  ) {
+    const commissionRate = 0.15; // 15% commission
+    final commission = amount * commissionRate;
+    return Earning(
+      id: id,
+      bookingId: bookingId,
+      orderAmount: amount,
+      commissionAmount: commission,
+      netAmount: amount - commission,
+      status: status,
+      type: type,
+      date: date,
+      customerName: customerName,
+      serviceName: serviceName,
+    );
   }
 
   void setFilters({int? year, int? month}) {

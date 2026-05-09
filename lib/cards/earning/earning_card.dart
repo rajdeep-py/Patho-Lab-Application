@@ -12,8 +12,8 @@ class EarningCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateFormat = DateFormat('MMM yyyy');
-    final period = '${dateFormat.format(earning.periodStart)} - ${dateFormat.format(earning.periodEnd)}';
+    final dateFormat = DateFormat('dd MMM yyyy');
+    final dateStr = dateFormat.format(earning.date);
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -49,12 +49,14 @@ class EarningCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        earning.id,
+                        earning.serviceName ?? 'Booking: ${earning.bookingId}',
                         style: AppTextStyles.cardTitle.copyWith(fontSize: 15),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        period,
+                        '$dateStr • ${earning.customerName ?? 'Patient'}',
                         style: AppTextStyles.caption.copyWith(fontSize: 12),
                       ),
                     ],
@@ -65,7 +67,7 @@ class EarningCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      '₹${earning.totalAmount.toStringAsFixed(0)}',
+                      '₹${earning.netAmount.toStringAsFixed(2)}',
                       style: AppTextStyles.cardTitle.copyWith(
                         fontSize: 18,
                         color: AppColors.primaryAccent,
