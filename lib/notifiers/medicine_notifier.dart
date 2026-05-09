@@ -85,7 +85,7 @@ class MedicineNotifier extends StateNotifier<MedicineState> {
         price: 65.00,
         quantity: 200,
         photoUrl:
-            'https://images.unsplash.com/photo-1587854692152-cbe660dbbb88?w=500&auto=format&fit=crop&q=60',
+            'https://images.unsplash.com/photo-1628771065518-0d82f1938462?w=500&auto=format&fit=crop&q=60',
         composition: 'Ibuprofen',
         manufacturer: 'Pfizer',
       ),
@@ -133,6 +133,12 @@ class MedicineNotifier extends StateNotifier<MedicineState> {
   void addToInventory(Medicine medicine) {
     if (!state.inventory.any((m) => m.id == medicine.id)) {
       state = state.copyWith(inventory: [...state.inventory, medicine]);
+    }
+  }
+
+  void addToCatalog(Medicine medicine) {
+    if (!state.catalog.any((m) => m.id == medicine.id)) {
+      state = state.copyWith(catalog: [...state.catalog, medicine]);
     }
   }
 }

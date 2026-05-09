@@ -1,8 +1,7 @@
 import 'package:go_router/go_router.dart';
 import '../screens/auth/splash_screen.dart';
 import '../screens/auth/login_screen.dart';
-import '../screens/earning/customer_earning_details_screen.dart'
-    show EarningDetailsScreen;
+import '../screens/earning/customer_earning_details_screen.dart' show EarningDetailsScreen;
 import '../screens/test_management/test_management_screen.dart';
 import '../screens/test_management/test_details_screen.dart';
 import '../screens/test_management/create_edit_test_screen.dart';
@@ -21,6 +20,7 @@ import '../screens/settings/privacy_policy_screen.dart';
 import '../screens/medicine_mangement/medicine_mangement_screen.dart';
 import '../screens/medicine_mangement/medicine_details_screen.dart';
 import '../screens/medicine_mangement/add_medicine_inventory_screen.dart';
+import '../screens/medicine_mangement/add_new_medicine_screen.dart';
 import '../models/test.dart';
 import '../models/package.dart';
 import '../models/earning.dart';
@@ -40,6 +40,7 @@ class AppRouter {
   static const String medicineManagement = '/medicine-management';
   static const String medicineDetails = '/medicine-details';
   static const String addMedicineInventory = '/add-medicine-inventory';
+  static const String addNewMedicine = '/add-new-medicine';
   static const String createEditTest = '/create-edit-test';
   static const String packageManagement = '/package-management';
   static const String packageDetails = '/package-details';
@@ -48,7 +49,7 @@ class AppRouter {
   static const String aboutUs = '/about-us';
   static const String termsConditions = '/terms-conditions';
   static const String privacyPolicy = '/privacy-policy';
-
+  
   static final router = GoRouter(
     initialLocation: splash,
     routes: [
@@ -131,6 +132,10 @@ class AppRouter {
       GoRoute(
         path: addMedicineInventory,
         builder: (context, state) => const AddMedicineInventoryScreen(),
+      ),
+      GoRoute(
+        path: addNewMedicine,
+        builder: (context, state) => const AddNewMedicineScreen(),
       ),
       GoRoute(
         path: settings,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/medicine_provider.dart';
@@ -44,8 +45,8 @@ class _AddMedicineInventoryScreenState
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: CustomAppBar(
-        title: 'Medicine Details',
-        subtitle: 'View and update specifications',
+        title: 'Add to Inventory',
+        subtitle: 'Select medicines and set clinical prices',
         showBackButton: true,
         actions: [
           if (_selectedMedicines.isNotEmpty)
@@ -59,19 +60,45 @@ class _AddMedicineInventoryScreenState
           const SizedBox(width: 8),
         ],
       ),
-      body: Column(
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Section 1: Search and Select
+          // LEFT SECTION: Search and Select
           Expanded(
-            flex: 4,
+            flex: 1,
             child: Container(
               padding: const EdgeInsets.all(AppSpacing.screenPadding),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildSectionHeader(
-                    'Search Medicines',
-                    'Find items to add to your clinical stock',
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: _buildSectionHeader(
+                          '1. Search Medicines',
+                          'Find items to add to your clinical stock',
+                        ),
+                      ),
+                      TextButton.icon(
+                        onPressed: () => context.push('/add-new-medicine'),
+                        icon: const Icon(
+                          IconsaxPlusLinear.add_circle,
+                          size: 16,
+                        ),
+                        label: const Text(
+                          'NOT FOUND? ADD NEW',
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppColors.primaryAccent,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 16),
                   TextField(
@@ -110,11 +137,11 @@ class _AddMedicineInventoryScreenState
             ),
           ),
 
-          const Divider(height: 1),
+          const VerticalDivider(width: 1, color: AppColors.divider),
 
-          // Section 2: Selected Items and Price Setting
+          // RIGHT SECTION: Selected Items and Price Setting
           Expanded(
-            flex: 3,
+            flex: 1,
             child: Container(
               color: Colors.white,
               padding: const EdgeInsets.all(AppSpacing.screenPadding),
@@ -122,7 +149,7 @@ class _AddMedicineInventoryScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildSectionHeader(
-                    'Clinical Pricing',
+                    '2. Clinical Pricing',
                     'Set your selling price for selected items',
                   ),
                   const SizedBox(height: 16),
@@ -148,6 +175,9 @@ class _AddMedicineInventoryScreenState
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: _addSelectedToInventory,
+                          style: ElevatedButton.styleFrom(
+                            padding: const EdgeInsets.symmetric(vertical: 20),
+                          ),
                           child: Text(
                             'ADD ${_selectedMedicines.length} ITEMS TO INVENTORY',
                           ),
@@ -202,8 +232,8 @@ class _AddMedicineInventoryScreenState
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: AppTextStyles.subHeader.copyWith(fontSize: 18)),
-        Text(subtitle, style: AppTextStyles.caption.copyWith(fontSize: 11)),
+        Text(title, style: AppTextStyles.subHeader.copyWith(fontSize: 20)),
+        Text(subtitle, style: AppTextStyles.caption.copyWith(fontSize: 12)),
       ],
     );
   }
@@ -230,9 +260,21 @@ class _AddMedicineInventoryScreenState
 
   Widget _buildEmptySelection() {
     return Center(
-      child: Text(
-        'Select medicines from above to set prices',
-        style: AppTextStyles.caption.copyWith(fontStyle: FontStyle.italic),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            IconsaxPlusLinear.add_circle,
+            color: AppColors.textTertiary,
+            size: 40,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Select medicines from the left to set prices',
+            style: AppTextStyles.caption.copyWith(fontStyle: FontStyle.italic),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
