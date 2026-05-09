@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../models/test.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
@@ -59,7 +60,7 @@ class TestCard extends ConsumerWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                  icon: const Icon(IconsaxPlusLinear.trash, color: AppColors.error),
                   onPressed: () {
                     _showDeleteConfirmation(context, ref);
                   },
@@ -127,7 +128,7 @@ class TestCard extends ConsumerWidget {
       width: 80,
       height: 80,
       color: AppColors.blush,
-      child: const Icon(Icons.science, color: AppColors.textTertiary),
+      child: const Icon(IconsaxPlusLinear.activity, color: AppColors.textTertiary),
     );
   }
 }

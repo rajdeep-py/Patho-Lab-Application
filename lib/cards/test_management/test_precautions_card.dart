@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../models/test.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
@@ -43,8 +44,8 @@ class _TestPrecautionsCardState extends ConsumerState<TestPrecautionsCard> {
                 Row(
                   children: [
                     const Icon(
-                      Icons.warning_amber_rounded,
-                      color: AppColors.warning,
+                      IconsaxPlusLinear.warning_2,
+                      color: AppColors.primaryAccent,
                     ),
                     const SizedBox(width: AppSpacing.elementGap),
                     Text(
@@ -57,8 +58,8 @@ class _TestPrecautionsCardState extends ConsumerState<TestPrecautionsCard> {
                 ),
                 IconButton(
                   icon: const Icon(
-                    Icons.edit_outlined,
-                    color: AppColors.warning,
+                    IconsaxPlusLinear.edit_2,
+                    color: AppColors.primary,
                   ),
                   onPressed: _editPrecautions,
                 ),
@@ -131,7 +132,7 @@ class _EditPrecautionsDialogState
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.add_circle, color: AppColors.primary),
+                  icon: const Icon(IconsaxPlusLinear.add_circle, color: AppColors.primary),
                   onPressed: () {
                     if (_precautionController.text.isNotEmpty) {
                       setState(() {
@@ -146,9 +147,9 @@ class _EditPrecautionsDialogState
             const SizedBox(height: 8),
             ..._precautions.asMap().entries.map(
               (e) => ListTile(
-                title: Text(e.value),
+                title: Text(e.value, style: AppTextStyles.description),
                 trailing: IconButton(
-                  icon: const Icon(Icons.delete, color: AppColors.error),
+                  icon: const Icon(IconsaxPlusLinear.trash, color: AppColors.error),
                   onPressed: () {
                     setState(() {
                       _precautions.removeAt(e.key);

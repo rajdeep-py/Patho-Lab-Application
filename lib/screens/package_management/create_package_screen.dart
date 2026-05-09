@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../models/package.dart';
 import '../../providers/package_provider.dart';
 import '../../providers/test_provider.dart';
@@ -196,7 +197,7 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
         actions: [
           IconButton(
             icon: const Icon(
-              Icons.check_circle_outline,
+              IconsaxPlusLinear.tick_circle,
               color: AppColors.primary,
             ),
             onPressed: _savePackage,
@@ -213,20 +214,20 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
             _buildTextField(
               _nameController,
               'Package Name',
-              Icons.medical_services_outlined,
+              IconsaxPlusLinear.box,
             ),
             const SizedBox(height: AppSpacing.elementGap),
             _buildTextField(
               _priceController,
               'Price',
-              Icons.currency_rupee_outlined,
+              IconsaxPlusLinear.wallet_2,
               isNumeric: true,
             ),
             const SizedBox(height: AppSpacing.elementGap),
             _buildTextField(
               _descriptionController,
               'Description',
-              Icons.description_outlined,
+              IconsaxPlusLinear.document_text,
               maxLines: 3,
             ),
             const SizedBox(height: AppSpacing.elementGap),
@@ -236,12 +237,12 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
                   child: _buildTextField(
                     _photoUrlController,
                     'Photo Path (or pick an image)',
-                    Icons.image_outlined,
+                    IconsaxPlusLinear.gallery,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(
-                    Icons.file_upload_outlined,
+                    IconsaxPlusLinear.document_upload,
                     color: AppColors.primary,
                   ),
                   onPressed: _pickImage,
@@ -259,7 +260,7 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
                 ),
                 TextButton.icon(
                   onPressed: _showTestSelectionDialog,
-                  icon: const Icon(Icons.add),
+                  icon: const Icon(IconsaxPlusLinear.add),
                   label: const Text('Add Tests'),
                 ),
               ],
@@ -278,13 +279,13 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
                   return ListTile(
                     contentPadding: EdgeInsets.zero,
                     leading: const Icon(
-                      Icons.check_circle,
+                      IconsaxPlusBold.tick_circle,
                       color: AppColors.primary,
                     ),
                     title: Text(test.name, style: AppTextStyles.description),
                     trailing: IconButton(
                       icon: const Icon(
-                        Icons.remove_circle_outline,
+                        IconsaxPlusLinear.minus_cirlce,
                         color: AppColors.error,
                       ),
                       onPressed: () {
@@ -305,13 +306,13 @@ class _CreatePackageScreenState extends ConsumerState<CreatePackageScreen> {
             _buildTextField(
               _sampleTimeController,
               'Sample Collection Time',
-              Icons.timer_outlined,
+              IconsaxPlusLinear.timer,
             ),
             const SizedBox(height: AppSpacing.elementGap),
             _buildTextField(
               _deliveryTimeController,
               'Report Delivery Time',
-              Icons.local_shipping_outlined,
+              IconsaxPlusLinear.truck_fast,
             ),
 
             const SizedBox(height: 32),

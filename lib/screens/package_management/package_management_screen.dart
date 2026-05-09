@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../providers/package_provider.dart';
 import '../../theme/app_theme.dart';
 import '../../cards/package/package_search_card.dart';
@@ -35,7 +36,7 @@ class PackageManagementScreen extends ConsumerWidget {
               onPressed: () {
                 context.push('/create-package');
               },
-              icon: const Icon(Icons.add, size: 18),
+              icon: const Icon(IconsaxPlusLinear.add, size: 18),
               label: const Text('Create'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,

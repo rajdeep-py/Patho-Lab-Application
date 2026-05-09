@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../models/test.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
@@ -33,15 +34,15 @@ class _TestCollectionDeliveryCardState extends ConsumerState<TestCollectionDeliv
             Align(
               alignment: Alignment.topRight,
               child: IconButton(
-                icon: const Icon(Icons.edit_outlined, color: Colors.white),
+                icon: const Icon(IconsaxPlusLinear.edit_2, color: Colors.white),
                 onPressed: _editCollectionDetails,
               ),
             ),
-            _buildRow(Icons.bloodtype_outlined, 'Sample Type', widget.test.sampleCollectionType),
+            _buildRow(IconsaxPlusLinear.drop, 'Sample Type', widget.test.sampleCollectionType),
             const Divider(height: AppSpacing.sectionGap, color: Colors.white24),
-            _buildRow(Icons.timer_outlined, 'Collection Time', widget.test.sampleCollectionTime),
+            _buildRow(IconsaxPlusLinear.timer, 'Collection Time', widget.test.sampleCollectionTime),
             const Divider(height: AppSpacing.sectionGap, color: Colors.white24),
-            _buildRow(Icons.local_shipping_outlined, 'Report Delivery', widget.test.reportDeliveryTime),
+            _buildRow(IconsaxPlusLinear.truck_fast, 'Report Delivery', widget.test.reportDeliveryTime),
           ],
         ),
       ),

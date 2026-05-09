@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
 
@@ -28,7 +29,7 @@ class TestSearchFilterCard extends ConsumerWidget {
                   },
                   decoration: const InputDecoration(
                     hintText: 'Search lab tests...',
-                    prefixIcon: Icon(Icons.search, color: AppColors.textTertiary),
+                    prefixIcon: Icon(IconsaxPlusLinear.search_normal, color: AppColors.textTertiary),
                   ),
                 ),
               ),
@@ -37,7 +38,7 @@ class TestSearchFilterCard extends ConsumerWidget {
                 onPressed: () {
                   context.push('/create-edit-test');
                 },
-                icon: const Icon(Icons.add),
+                icon: const Icon(IconsaxPlusLinear.add),
                 label: const Text('New Test'),
               ),
             ],

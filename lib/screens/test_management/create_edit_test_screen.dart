@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../models/test.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
@@ -139,7 +140,7 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
         actions: [
           IconButton(
             icon: const Icon(
-              Icons.check_circle_outline,
+              IconsaxPlusLinear.tick_circle,
               color: AppColors.primary,
             ),
             onPressed: _saveTest,
@@ -155,19 +156,19 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
             _buildTextField(
               _nameController,
               'Test Name',
-              Icons.science_outlined,
+              IconsaxPlusLinear.activity,
             ),
             const SizedBox(height: AppSpacing.elementGap),
             _buildTextField(
               _categoryController,
               'Category (e.g. Blood Test)',
-              Icons.category_outlined,
+              IconsaxPlusLinear.category,
             ),
             const SizedBox(height: AppSpacing.elementGap),
             _buildTextField(
               _priceController,
               'Price',
-              Icons.currency_rupee_outlined,
+              IconsaxPlusLinear.wallet_2,
               isNumeric: true,
             ),
             const SizedBox(height: AppSpacing.elementGap),
@@ -177,12 +178,12 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
                   child: _buildTextField(
                     _photoUrlController,
                     'Photo Path (or pick an image)',
-                    Icons.image_outlined,
+                    IconsaxPlusLinear.gallery,
                   ),
                 ),
                 IconButton(
                   icon: const Icon(
-                    Icons.file_upload_outlined,
+                    IconsaxPlusLinear.document_upload,
                     color: AppColors.primary,
                   ),
                   onPressed: _pickImage,
@@ -195,7 +196,7 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
             _buildTextField(
               _descriptionController,
               'Description',
-              Icons.description_outlined,
+              IconsaxPlusLinear.document_text,
               maxLines: 3,
             ),
 
@@ -212,19 +213,19 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
             _buildTextField(
               _sampleTypeController,
               'Sample Type',
-              Icons.bloodtype_outlined,
+              IconsaxPlusLinear.drop,
             ),
             const SizedBox(height: AppSpacing.elementGap),
             _buildTextField(
               _sampleTimeController,
               'Sample Collection Time',
-              Icons.timer_outlined,
+              IconsaxPlusLinear.timer,
             ),
             const SizedBox(height: AppSpacing.elementGap),
             _buildTextField(
               _deliveryTimeController,
               'Report Delivery Time',
-              Icons.local_shipping_outlined,
+              IconsaxPlusLinear.truck_fast,
             ),
 
             const SizedBox(height: 32),
@@ -296,7 +297,7 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
             const SizedBox(width: AppSpacing.elementGap),
             IconButton(
               icon: const Icon(
-                Icons.add_circle,
+                IconsaxPlusLinear.add_circle,
                 color: AppColors.primary,
                 size: 32,
               ),
@@ -321,7 +322,10 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
             child: ListTile(
               title: Text(item, style: AppTextStyles.description),
               trailing: IconButton(
-                icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                icon: const Icon(
+                  IconsaxPlusLinear.trash,
+                  color: AppColors.error,
+                ),
                 onPressed: () {
                   setState(() {
                     list.removeAt(index);

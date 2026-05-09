@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../models/package.dart';
 import '../../providers/package_provider.dart';
 import '../../providers/test_provider.dart';
@@ -33,13 +34,13 @@ class PackageDetailsScreen extends ConsumerWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
+            icon: const Icon(IconsaxPlusLinear.edit_2, color: AppColors.primary),
             onPressed: () {
               context.push('/create-package', extra: updatedPackage);
             },
           ),
           IconButton(
-            icon: const Icon(Icons.delete_outline, color: AppColors.error),
+            icon: const Icon(IconsaxPlusLinear.trash, color: AppColors.error),
             onPressed: () {
               _showDeleteConfirmation(context, ref, updatedPackage);
             },
@@ -82,7 +83,7 @@ class PackageDetailsScreen extends ConsumerWidget {
               ),
               child: _getDecorationImage(pkg.photoUrl) == null
                   ? const Icon(
-                      Icons.medication,
+                      IconsaxPlusLinear.box,
                       color: AppColors.textTertiary,
                       size: 50,
                     )
@@ -152,7 +153,7 @@ class PackageDetailsScreen extends ConsumerWidget {
                       Row(
                         children: [
                           const Icon(
-                            Icons.science,
+                            IconsaxPlusLinear.activity,
                             color: AppColors.primary,
                             size: 20,
                           ),
@@ -184,7 +185,7 @@ class PackageDetailsScreen extends ConsumerWidget {
                               return Row(
                                 children: [
                                   const Icon(
-                                    Icons.check_circle_outline,
+                                    IconsaxPlusLinear.tick_circle,
                                     color: AppColors.success,
                                     size: 16,
                                   ),
@@ -223,13 +224,13 @@ class PackageDetailsScreen extends ConsumerWidget {
       child: Column(
         children: [
           _buildRow(
-            Icons.timer_outlined,
+            IconsaxPlusLinear.timer,
             'Collection Time',
             pkg.sampleCollectionTime,
           ),
           const Divider(height: AppSpacing.sectionGap, color: Colors.white24),
           _buildRow(
-            Icons.local_shipping_outlined,
+            IconsaxPlusLinear.truck_fast,
             'Report Delivery',
             pkg.reportDeliveryTime,
           ),

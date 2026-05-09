@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../models/test.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
@@ -44,7 +45,7 @@ class _TestDescriptionCardState extends ConsumerState<TestDescriptionCard> {
                 ),
                 IconButton(
                   icon: const Icon(
-                    Icons.edit_outlined,
+                    IconsaxPlusLinear.edit_2,
                     color: AppColors.primary,
                   ),
                   onPressed: _editDescription,
@@ -69,8 +70,8 @@ class _TestDescriptionCardState extends ConsumerState<TestDescriptionCard> {
                   child: Row(
                     children: [
                       const Icon(
-                        Icons.check_circle,
-                        color: AppColors.primary,
+                        IconsaxPlusBold.tick_circle,
+                        color: AppColors.success,
                         size: 20,
                       ),
                       const SizedBox(width: AppSpacing.elementGap),
@@ -142,7 +143,7 @@ class _EditDescriptionDialogState
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.add_circle, color: AppColors.primary),
+                  icon: const Icon(IconsaxPlusLinear.add_circle, color: AppColors.primary),
                   onPressed: () {
                     if (_paramController.text.isNotEmpty) {
                       setState(() {
@@ -157,9 +158,9 @@ class _EditDescriptionDialogState
             const SizedBox(height: 8),
             ..._parameters.asMap().entries.map(
               (e) => ListTile(
-                title: Text(e.value),
+                title: Text(e.value, style: AppTextStyles.description),
                 trailing: IconButton(
-                  icon: const Icon(Icons.delete, color: AppColors.error),
+                  icon: const Icon(IconsaxPlusLinear.trash, color: AppColors.error),
                   onPressed: () {
                     setState(() {
                       _parameters.removeAt(e.key);

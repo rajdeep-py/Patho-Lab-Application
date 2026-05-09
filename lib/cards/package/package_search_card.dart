@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../providers/package_provider.dart';
 import '../../theme/app_theme.dart';
 
@@ -18,7 +19,7 @@ class PackageSearchCard extends ConsumerWidget {
         },
         decoration: const InputDecoration(
           hintText: 'Search health packages...',
-          prefixIcon: Icon(Icons.search, color: AppColors.textTertiary),
+          prefixIcon: Icon(IconsaxPlusLinear.search_normal, color: AppColors.textTertiary),
         ),
       ),
     );

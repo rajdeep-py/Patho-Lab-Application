@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../models/test.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
@@ -58,7 +59,7 @@ class _TestHeaderCardState extends ConsumerState<TestHeaderCard> {
                 ),
                 IconButton(
                   icon: const Icon(
-                    Icons.edit_outlined,
+                    IconsaxPlusLinear.edit_2,
                     color: AppColors.primary,
                   ),
                   onPressed: _editHeader,
@@ -93,7 +94,7 @@ class _TestHeaderCardState extends ConsumerState<TestHeaderCard> {
       width: double.infinity,
       height: 200,
       color: AppColors.blush,
-      child: const Icon(Icons.science, color: AppColors.textTertiary, size: 50),
+      child: const Icon(IconsaxPlusLinear.activity, color: AppColors.textTertiary, size: 50),
     );
   }
 
@@ -210,7 +211,8 @@ class _EditHeaderDialogState extends ConsumerState<_EditHeaderDialog> {
                 ),
                 child: _photoUrl.isEmpty
                     ? const Icon(
-                        Icons.add_a_photo,
+                        IconsaxPlusLinear.camera,
+                        size: 40,
                         color: AppColors.textTertiary,
                       )
                     : null,

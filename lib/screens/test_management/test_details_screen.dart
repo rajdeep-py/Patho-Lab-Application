@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../models/test.dart';
 import '../../theme/app_theme.dart';
 import '../../cards/test_management/test_header_card.dart';
@@ -36,7 +37,7 @@ class TestDetailsScreen extends ConsumerWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.delete_outline, color: AppColors.error),
+            icon: const Icon(IconsaxPlusLinear.trash, color: AppColors.error),
             onPressed: () {
               _showDeleteConfirmation(context, ref, updatedTest);
             },
