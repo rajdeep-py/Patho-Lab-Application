@@ -3,7 +3,7 @@ import '../screens/auth/splash_screen.dart';
 import '../screens/auth/login_screen.dart';
 import '../screens/test_management/test_management_screen.dart';
 import '../screens/test_management/test_details_screen.dart';
-import '../screens/test_management/pick_test_screen.dart';
+import '../screens/test_management/create_edit_test_screen.dart';
 import '../screens/booking/booking_management_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import '../screens/earning/earning_screen.dart';
@@ -18,23 +18,16 @@ class AppRouter {
   static const String dashboard = '/dashboard';
   static const String testManagement = '/test-management';
   static const String testDetails = '/test-details';
-  static const String pickTest = '/pick-test';
   static const String bookings = '/bookings';
   static const String profile = '/profile';
   static const String earnings = '/payments';
   static const String earningDetails = '/earning-details';
-
+  static const String createEditTest = '/create-edit-test';
   static final router = GoRouter(
     initialLocation: splash,
     routes: [
-      GoRoute(
-        path: splash,
-        builder: (context, state) => const SplashScreen(),
-      ),
-      GoRoute(
-        path: login,
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: splash, builder: (context, state) => const SplashScreen()),
+      GoRoute(path: login, builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: dashboard,
         builder: (context, state) => const DashboardScreen(),
@@ -50,9 +43,13 @@ class AppRouter {
           return TestDetailsScreen(test: test);
         },
       ),
+
       GoRoute(
-        path: pickTest,
-        builder: (context, state) => const PickTestScreen(),
+        path: createEditTest,
+        builder: (context, state) {
+          final test = state.extra as LabTest?;
+          return CreateEditTestScreen(test: test);
+        },
       ),
       GoRoute(
         path: bookings,

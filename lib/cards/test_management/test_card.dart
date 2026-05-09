@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:iconsax_plus/iconsax_plus.dart';
 import 'package:go_router/go_router.dart';
 import '../../models/test.dart';
-import '../../theme/app_theme.dart';
 import '../../providers/test_provider.dart';
+import '../../theme/app_theme.dart';
 
 class TestCard extends ConsumerWidget {
   final LabTest test;
@@ -14,162 +13,97 @@ class TestCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: const EdgeInsets.symmetric(horizontal: AppSpacing.screenPadding, vertical: AppSpacing.elementGap),
       decoration: AppCardStyles.sleekCard,
       child: Material(
         color: Colors.transparent,
+        borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
         child: InkWell(
-          onTap: () => context.push('/test-details', extra: test),
+          onTap: () {
+            context.push('/test-details', extra: test);
+          },
           borderRadius: BorderRadius.circular(AppSpacing.cardRadius),
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(AppSpacing.cardPadding),
             child: Row(
               children: [
-                // Enhanced Test Image with Gradient Overlay
-                Stack(
-                  children: [
-                    Container(
-                      width: 90,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primary.withAlpha(30),
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: Image.network(
-                          test.photoUrl,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Container(
-                                color: AppColors.background,
-                                child: const Icon(
-                                  IconsaxPlusLinear.image,
-                                  color: AppColors.textTertiary,
-                                ),
-                              ),
-                        ),
-                      ),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(AppSpacing.elementGap),
+                  child: Image.network(
+                    test.photoUrl,
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      width: 80,
+                      height: 80,
+                      color: AppColors.blush,
+                      child: const Icon(Icons.science, color: AppColors.textTertiary),
                     ),
-                    Positioned(
-                      top: 6,
-                      right: 6,
-                      child: Container(
-                        width: 12,
-                        height: 12,
-                        decoration: BoxDecoration(
-                          color: test.isActive
-                              ? AppColors.success
-                              : AppColors.error,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 2),
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  (test.isActive
-                                          ? AppColors.success
-                                          : AppColors.error)
-                                      .withAlpha(100),
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-                const SizedBox(width: 16),
-                // Detailed Info
+                const SizedBox(width: AppSpacing.cardPadding),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
+                        test.category.toUpperCase(),
+                        style: AppTextStyles.tagline,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
                         test.name,
-                        style: AppTextStyles.cardTitle.copyWith(
-                          fontSize: 16,
-                          height: 1.2,
-                        ),
+                        style: AppTextStyles.cardTitle,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 6),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.secondaryCyan.withAlpha(20),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          test.category.toUpperCase(),
-                          style: AppTextStyles.tagline.copyWith(
-                            fontSize: 9,
-                            color: AppColors.secondaryCyan,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Row(
-                        children: [
-                          Text(
-                            '₹${test.price.toStringAsFixed(0)}',
-                            style: AppTextStyles.cardTitle.copyWith(
-                              color: AppColors.textPrimary,
-                              fontSize: 18,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            '/ test',
-                            style: AppTextStyles.caption.copyWith(fontSize: 10),
-                          ),
-                        ],
+                      const SizedBox(height: 8),
+                      Text(
+                        '₹${test.price.toStringAsFixed(2)}',
+                        style: AppTextStyles.subHeader.copyWith(color: AppColors.primaryAccent, fontSize: 18),
                       ),
                     ],
                   ),
                 ),
-                // Premium Actions
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Transform.scale(
-                      scale: 0.8,
-                      child: Switch.adaptive(
-                        value: test.isActive,
-                        activeTrackColor: AppColors.primary,
-                        onChanged: (value) => ref
-                            .read(testProvider.notifier)
-                            .toggleTestStatus(test.id),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: AppColors.background,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: const Icon(
-                        IconsaxPlusLinear.arrow_right_3,
-                        size: 18,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
+                IconButton(
+                  icon: const Icon(Icons.delete_outline, color: AppColors.error),
+                  onPressed: () {
+                    _showDeleteConfirmation(context, ref);
+                  },
                 ),
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  void _showDeleteConfirmation(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Lab Test', style: AppTextStyles.cardTitle),
+        content: Text('Are you sure you want to delete ${test.name}?', style: AppTextStyles.description),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSpacing.cardRadius)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel', style: TextStyle(color: AppColors.textSecondary)),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              ref.read(testProvider.notifier).deleteTest(test.id);
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('${test.name} deleted successfully')),
+              );
+            },
+            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+            child: const Text('Delete'),
+          ),
+        ],
       ),
     );
   }
