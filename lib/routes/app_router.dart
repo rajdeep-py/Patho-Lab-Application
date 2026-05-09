@@ -1,13 +1,14 @@
 import 'package:go_router/go_router.dart';
 import '../screens/auth/splash_screen.dart';
 import '../screens/auth/login_screen.dart';
+import '../screens/earning/customer_earning_details_screen.dart';
 import '../screens/test_management/test_management_screen.dart';
 import '../screens/test_management/test_details_screen.dart';
 import '../screens/test_management/create_edit_test_screen.dart';
 import '../screens/booking/booking_management_screen.dart';
 import '../screens/profile/profile_screen.dart';
 import '../screens/earning/earning_screen.dart';
-import '../screens/earning/earning_details_screen.dart';
+import '../screens/earning/company_earning_history_screen.dart';
 import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/package_management/package_management_screen.dart';
 import '../screens/package_management/package_details_screen.dart';
@@ -29,6 +30,7 @@ class AppRouter {
   static const String bookings = '/bookings';
   static const String profile = '/profile';
   static const String earnings = '/payments';
+  static const String companyEarnings = '/company-earnings';
   static const String earningDetails = '/earning-details';
   static const String createEditTest = '/create-edit-test';
   static const String packageManagement = '/package-management';
@@ -38,6 +40,7 @@ class AppRouter {
   static const String aboutUs = '/about-us';
   static const String termsConditions = '/terms-conditions';
   static const String privacyPolicy = '/privacy-policy';
+
   static final router = GoRouter(
     initialLocation: splash,
     routes: [
@@ -58,7 +61,6 @@ class AppRouter {
           return TestDetailsScreen(test: test);
         },
       ),
-
       GoRoute(
         path: createEditTest,
         builder: (context, state) {
@@ -95,6 +97,10 @@ class AppRouter {
       GoRoute(
         path: earnings,
         builder: (context, state) => const EarningScreen(),
+      ),
+      GoRoute(
+        path: companyEarnings,
+        builder: (context, state) => const CompanyEarningHistoryScreen(),
       ),
       GoRoute(
         path: earningDetails,

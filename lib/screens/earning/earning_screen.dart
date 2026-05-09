@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../widgets/app_bar.dart';
 import '../../widgets/side_nav_bar.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/earning_provider.dart';
-import '../../cards/earning/earning_card.dart';
+import '../../cards/earning/customer_earning_card.dart';
 import '../../cards/earning/claim_pay_earning_card.dart';
 
 class EarningScreen extends ConsumerWidget {
@@ -32,6 +33,13 @@ class EarningScreen extends ConsumerWidget {
         showMenuButton: true,
         actions: [
           IconButton(
+            onPressed: () => context.push('/company-earnings'),
+            icon: const Icon(
+              IconsaxPlusLinear.document_text,
+              color: AppColors.textPrimary,
+            ),
+          ),
+          IconButton(
             onPressed: () {
               // Open filter logic
             },
@@ -43,6 +51,7 @@ class EarningScreen extends ConsumerWidget {
           const SizedBox(width: 8),
         ],
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSpacing.screenPadding),
         child: Column(

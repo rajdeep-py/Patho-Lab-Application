@@ -6,12 +6,14 @@ class EarningState {
   final bool isLoading;
   final int? yearFilter;
   final int? monthFilter;
+  final bool isClaimPending;
 
   EarningState({
     required this.earnings,
     this.isLoading = false,
     this.yearFilter,
     this.monthFilter,
+    this.isClaimPending = false,
   });
 
   double get totalToBePaid => earnings
@@ -27,12 +29,14 @@ class EarningState {
     bool? isLoading,
     int? yearFilter,
     int? monthFilter,
+    bool? isClaimPending,
   }) {
     return EarningState(
       earnings: earnings ?? this.earnings,
       isLoading: isLoading ?? this.isLoading,
       yearFilter: yearFilter ?? this.yearFilter,
       monthFilter: monthFilter ?? this.monthFilter,
+      isClaimPending: isClaimPending ?? this.isClaimPending,
     );
   }
 }
@@ -134,5 +138,9 @@ class EarningNotifier extends StateNotifier<EarningState> {
 
   void setFilters({int? year, int? month}) {
     state = state.copyWith(yearFilter: year, monthFilter: month);
+  }
+
+  void submitClaim() {
+    state = state.copyWith(isClaimPending: true);
   }
 }

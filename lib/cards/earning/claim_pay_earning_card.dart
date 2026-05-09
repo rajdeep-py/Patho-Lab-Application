@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:iconsax_plus/iconsax_plus.dart';
 import '../../theme/app_theme.dart';
 import '../../providers/earning_provider.dart';
+import 'claim_popup.dart';
+import 'pay_now_popup.dart';
 
 class ClaimPayEarningCard extends ConsumerWidget {
   const ClaimPayEarningCard({super.key});
@@ -24,7 +26,7 @@ class ClaimPayEarningCard extends ConsumerWidget {
             color: AppColors.primaryAccent,
             buttonLabel: 'PAY NOW',
             onButtonPressed: () {
-              // Implementation for Payment
+              showPayNowPopup(context, earningState.totalToBePaid);
             },
           ),
           Divider(height: 1, color: AppColors.divider.withAlpha(120)),
@@ -32,12 +34,14 @@ class ClaimPayEarningCard extends ConsumerWidget {
             context,
             title: 'Amount to be Claimed',
             amount: earningState.totalToBeClaimed,
-            subtitle: 'Paid by customers via online',
+            subtitle: earningState.isClaimPending ? 'Claim on the way' : 'Paid by customers via online',
             icon: IconsaxPlusLinear.wallet_check,
             color: AppColors.success,
             buttonLabel: 'CLAIM NOW',
+            showStatusInsteadOfButton: earningState.isClaimPending,
+            statusLabel: 'PENDING',
             onButtonPressed: () {
-              // Implementation for Claiming
+              showClaimPopup(context);
             },
           ),
         ],
@@ -53,6 +57,8 @@ class ClaimPayEarningCard extends ConsumerWidget {
     required IconData icon,
     required Color color,
     required String buttonLabel,
+    bool showStatusInsteadOfButton = false,
+    String? statusLabel,
     VoidCallback? onButtonPressed,
   }) {
     return Padding(
@@ -78,25 +84,45 @@ class ClaimPayEarningCard extends ConsumerWidget {
                   '₹${amount.toStringAsFixed(2)}',
                   style: AppTextStyles.cardTitle.copyWith(fontSize: 22, color: AppColors.textPrimary),
                 ),
-                Text(subtitle, style: AppTextStyles.caption.copyWith(fontSize: 10)),
+                Text(
+                  subtitle,
+                  style: AppTextStyles.caption.copyWith(
+                    fontSize: 10,
+                    color: showStatusInsteadOfButton ? color : AppColors.textTertiary,
+                    fontWeight: showStatusInsteadOfButton ? FontWeight.bold : FontWeight.normal,
+                  ),
+                ),
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: onButtonPressed,
-            style: ElevatedButton.styleFrom(
-              backgroundColor: color,
-              foregroundColor: Colors.white,
-              elevation: 0,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              minimumSize: const Size(80, 36),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+          if (showStatusInsteadOfButton)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: color.withAlpha(20),
+                borderRadius: BorderRadius.circular(8),
               ),
-              textStyle: AppTextStyles.tagline.copyWith(fontSize: 10, fontWeight: FontWeight.bold),
+              child: Text(
+                statusLabel ?? '',
+                style: AppTextStyles.tagline.copyWith(fontSize: 10, color: color, fontWeight: FontWeight.bold),
+              ),
+            )
+          else
+            ElevatedButton(
+              onPressed: onButtonPressed,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: color,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                minimumSize: const Size(80, 36),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                textStyle: AppTextStyles.tagline.copyWith(fontSize: 10, fontWeight: FontWeight.bold),
+              ),
+              child: Text(buttonLabel),
             ),
-            child: Text(buttonLabel),
-          ),
         ],
       ),
     );
