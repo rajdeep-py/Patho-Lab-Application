@@ -271,9 +271,21 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
               ),
             ).animate().fadeIn(duration: 400.ms, delay: 250.ms).slideY(begin: 0.1),
 
-            ElevatedButton(
-              onPressed: _saveTest,
-              child: Text(isEdit ? 'Update Lab Test' : 'Create Lab Test'),
+            SizedBox(
+              width: double.infinity,
+              height: 56,
+              child: ElevatedButton(
+                onPressed: _saveTest,
+                style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+                child: Text(
+                  isEdit ? 'Update Lab Test' : 'Create Lab Test',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
             ).animate().fadeIn(duration: 400.ms, delay: 300.ms).slideY(begin: 0.1),
             const SizedBox(height: AppSpacing.sectionGap),
           ],
@@ -303,11 +315,27 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
       style: AppTextStyles.description,
       decoration: InputDecoration(
         labelText: label,
-        prefixIcon: Icon(icon, color: AppColors.primary),
+        labelStyle: const TextStyle(color: AppColors.textTertiary),
+        prefixIcon: Icon(icon, color: AppColors.primaryAccent, size: 20),
+        filled: true,
+        fillColor: AppColors.background,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          if (label != 'Photo URL') {
+          if (label != 'Photo URL' && label != 'Photo Path (or pick an image)') {
             return 'Please enter $label';
           }
         }
@@ -333,7 +361,25 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
               child: TextFormField(
                 controller: controller,
                 style: AppTextStyles.description,
-                decoration: InputDecoration(labelText: 'Add $label'),
+                decoration: InputDecoration(
+                  labelText: 'Add $label',
+                  labelStyle: const TextStyle(color: AppColors.textTertiary),
+                  filled: true,
+                  fillColor: AppColors.background,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: BorderSide.none,
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(16),
+                    borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                ),
               ),
             ),
             const SizedBox(width: AppSpacing.elementGap),
@@ -360,13 +406,18 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
           final item = entry.value;
           return Container(
             margin: const EdgeInsets.only(bottom: 8),
-            decoration: AppCardStyles.sleekCard,
+            decoration: BoxDecoration(
+              color: AppColors.primary.withAlpha(15),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.primary.withAlpha(30)),
+            ),
             child: ListTile(
-              title: Text(item, style: AppTextStyles.description),
+              title: Text(item, style: AppTextStyles.description.copyWith(fontWeight: FontWeight.w500)),
               trailing: IconButton(
                 icon: const Icon(
-                  IconsaxPlusLinear.trash,
+                  IconsaxPlusLinear.close_circle,
                   color: AppColors.error,
+                  size: 20,
                 ),
                 onPressed: () {
                   setState(() {
