@@ -49,6 +49,12 @@ class SideNavBar extends ConsumerWidget {
                   isSelected: currentPath == '/test-management',
                 ),
                 _NavTile(
+                  icon: IconsaxPlusLinear.box,
+                  label: 'Package Management',
+                  onTap: () => _navigateTo(context, '/package-management'),
+                  isSelected: currentPath == '/package-management',
+                ),
+                _NavTile(
                   icon: IconsaxPlusLinear.calendar_tick,
                   label: 'Test Bookings',
                   onTap: () => _navigateTo(context, '/bookings'),
@@ -115,7 +121,11 @@ class SideNavBar extends ConsumerWidget {
                 ),
               ],
             ),
-            child: const Icon(IconsaxPlusLinear.user, color: Colors.white, size: 28),
+            child: const Icon(
+              IconsaxPlusLinear.user,
+              color: Colors.white,
+              size: 28,
+            ),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -203,7 +213,9 @@ class _NavTile extends StatelessWidget {
           duration: const Duration(milliseconds: 200),
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
           decoration: BoxDecoration(
-            color: isSelected ? AppColors.primary.withAlpha(25) : Colors.transparent,
+            color: isSelected
+                ? AppColors.primary.withAlpha(25)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(16),
           ),
           child: Row(

@@ -48,7 +48,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       ).showSnackBar(SnackBar(content: Text(authState.error!)));
     } else if (authState.user != null) {
       if (mounted) {
-        context.go('/test-management');
+        context.go('/dashboard');
       }
     }
   }

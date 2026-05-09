@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:patho_lab_panel/widgets/side_nav_bar.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
 import '../../cards/test_management/test_search_filter_card.dart';
@@ -14,6 +15,7 @@ class TestManagementScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: AppColors.background,
+      drawer: const SideNavBar(),
       appBar: AppBar(
         backgroundColor: AppColors.surface,
         elevation: 0,

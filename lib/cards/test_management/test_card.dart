@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'dart:convert';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -29,18 +32,7 @@ class TestCard extends ConsumerWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(AppSpacing.elementGap),
-                  child: Image.network(
-                    test.photoUrl,
-                    width: 80,
-                    height: 80,
-                    fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      width: 80,
-                      height: 80,
-                      color: AppColors.blush,
-                      child: const Icon(Icons.science, color: AppColors.textTertiary),
-                    ),
-                  ),
+                  child: _buildTestImage(test.photoUrl),
                 ),
                 const SizedBox(width: AppSpacing.cardPadding),
                 Expanded(
@@ -105,6 +97,37 @@ class TestCard extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildTestImage(String url) {
+    if (url.startsWith('http')) {
+      return Image.network(url, width: 80, height: 80, fit: BoxFit.cover, errorBuilder: _errorBuilder);
+    } else if (url.startsWith('data:image')) {
+      try {
+        final base64Str = url.split(',').last;
+        return Image.memory(base64Decode(base64Str), width: 80, height: 80, fit: BoxFit.cover, errorBuilder: _errorBuilder);
+      } catch (e) {
+        return _buildErrorPlaceholder();
+      }
+    } else {
+      if (kIsWeb || url.isEmpty) {
+        return _buildErrorPlaceholder();
+      }
+      return Image.file(File(url), width: 80, height: 80, fit: BoxFit.cover, errorBuilder: _errorBuilder);
+    }
+  }
+
+  Widget _errorBuilder(BuildContext context, Object error, StackTrace? stackTrace) {
+    return _buildErrorPlaceholder();
+  }
+
+  Widget _buildErrorPlaceholder() {
+    return Container(
+      width: 80,
+      height: 80,
+      color: AppColors.blush,
+      child: const Icon(Icons.science, color: AppColors.textTertiary),
     );
   }
 }

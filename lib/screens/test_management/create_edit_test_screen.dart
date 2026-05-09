@@ -1,6 +1,9 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:file_picker/file_picker.dart';
 import '../../models/test.dart';
 import '../../providers/test_provider.dart';
 import '../../theme/app_theme.dart';
@@ -11,7 +14,8 @@ class CreateEditTestScreen extends ConsumerStatefulWidget {
   const CreateEditTestScreen({super.key, this.test});
 
   @override
-  ConsumerState<CreateEditTestScreen> createState() => _CreateEditTestScreenState();
+  ConsumerState<CreateEditTestScreen> createState() =>
+      _CreateEditTestScreenState();
 }
 
 class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
@@ -27,7 +31,7 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
 
   List<String> _parameters = [];
   List<String> _precautions = [];
-  
+
   final _paramController = TextEditingController();
   final _precautionController = TextEditingController();
 
@@ -39,42 +43,62 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
     final test = widget.test;
     _nameController = TextEditingController(text: test?.name ?? '');
     _categoryController = TextEditingController(text: test?.category ?? '');
-    _priceController = TextEditingController(text: test?.price.toString() ?? '');
+    _priceController = TextEditingController(
+      text: test?.price.toString() ?? '',
+    );
     _photoUrlController = TextEditingController(text: test?.photoUrl ?? '');
-    _descriptionController = TextEditingController(text: test?.detailedDescription ?? '');
-    _sampleTypeController = TextEditingController(text: test?.sampleCollectionType ?? '');
-    _sampleTimeController = TextEditingController(text: test?.sampleCollectionTime ?? '');
-    _deliveryTimeController = TextEditingController(text: test?.reportDeliveryTime ?? '');
-    
+    _descriptionController = TextEditingController(
+      text: test?.detailedDescription ?? '',
+    );
+    _sampleTypeController = TextEditingController(
+      text: test?.sampleCollectionType ?? '',
+    );
+    _sampleTimeController = TextEditingController(
+      text: test?.sampleCollectionTime ?? '',
+    );
+    _deliveryTimeController = TextEditingController(
+      text: test?.reportDeliveryTime ?? '',
+    );
+
     if (test != null) {
       _parameters = List.from(test.parameters);
       _precautions = List.from(test.precautions);
     }
   }
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _categoryController.dispose();
-    _priceController.dispose();
-    _photoUrlController.dispose();
-    _descriptionController.dispose();
-    _sampleTypeController.dispose();
-    _sampleTimeController.dispose();
-    _deliveryTimeController.dispose();
-    _paramController.dispose();
-    _precautionController.dispose();
-    super.dispose();
+  Future<void> _pickImage() async {
+    final result = await FilePicker.pickFiles(type: FileType.image);
+    if (result != null) {
+      final file = result.files.single;
+      if (kIsWeb) {
+        if (file.bytes != null) {
+          final base64Str = base64Encode(file.bytes!);
+          setState(() {
+            _photoUrlController.text = 'data:image/png;base64,$base64Str';
+          });
+        }
+      } else {
+        if (file.path != null) {
+          setState(() {
+            _photoUrlController.text = file.path!;
+          });
+        }
+      }
+    }
   }
 
   void _saveTest() {
     if (_formKey.currentState!.validate()) {
       final newTest = LabTest(
-        id: isEdit ? widget.test!.id : DateTime.now().millisecondsSinceEpoch.toString(),
+        id: isEdit
+            ? widget.test!.id
+            : DateTime.now().millisecondsSinceEpoch.toString(),
         name: _nameController.text,
         category: _categoryController.text,
         price: double.parse(_priceController.text),
-        photoUrl: _photoUrlController.text.isEmpty ? 'https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2070&auto=format&fit=crop' : _photoUrlController.text,
+        photoUrl: _photoUrlController.text.isEmpty
+            ? 'https://images.unsplash.com/photo-1579154204601-01588f351e67?q=80&w=2070&auto=format&fit=crop'
+            : _photoUrlController.text,
         detailedDescription: _descriptionController.text,
         parameters: _parameters,
         precautions: _precautions,
@@ -91,7 +115,11 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
 
       context.pop();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(isEdit ? 'Test updated successfully' : 'Test created successfully')),
+        SnackBar(
+          content: Text(
+            isEdit ? 'Test updated successfully' : 'Test created successfully',
+          ),
+        ),
       );
     }
   }
@@ -104,10 +132,16 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
         backgroundColor: AppColors.surface,
         elevation: 0,
         iconTheme: const IconThemeData(color: AppColors.textPrimary),
-        title: Text(isEdit ? 'Edit Lab Test' : 'Create New Lab Test', style: AppTextStyles.subHeader),
+        title: Text(
+          isEdit ? 'Edit Lab Test' : 'Create New Lab Test',
+          style: AppTextStyles.subHeader,
+        ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.check_circle_outline, color: AppColors.primary),
+            icon: const Icon(
+              Icons.check_circle_outline,
+              color: AppColors.primary,
+            ),
             onPressed: _saveTest,
           ),
         ],
@@ -118,34 +152,81 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
           padding: const EdgeInsets.all(AppSpacing.screenPadding),
           children: [
             _buildSectionTitle('Basic Information'),
-            _buildTextField(_nameController, 'Test Name', Icons.science_outlined),
+            _buildTextField(
+              _nameController,
+              'Test Name',
+              Icons.science_outlined,
+            ),
             const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(_categoryController, 'Category (e.g. Blood Test)', Icons.category_outlined),
+            _buildTextField(
+              _categoryController,
+              'Category (e.g. Blood Test)',
+              Icons.category_outlined,
+            ),
             const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(_priceController, 'Price', Icons.currency_rupee_outlined, isNumeric: true),
+            _buildTextField(
+              _priceController,
+              'Price',
+              Icons.currency_rupee_outlined,
+              isNumeric: true,
+            ),
             const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(_photoUrlController, 'Photo URL', Icons.image_outlined),
-            
+            Row(
+              children: [
+                Expanded(
+                  child: _buildTextField(
+                    _photoUrlController,
+                    'Photo Path (or pick an image)',
+                    Icons.image_outlined,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(
+                    Icons.file_upload_outlined,
+                    color: AppColors.primary,
+                  ),
+                  onPressed: _pickImage,
+                ),
+              ],
+            ),
+
             const SizedBox(height: AppSpacing.sectionGap),
             _buildSectionTitle('Detailed Description'),
-            _buildTextField(_descriptionController, 'Description', Icons.description_outlined, maxLines: 3),
-            
+            _buildTextField(
+              _descriptionController,
+              'Description',
+              Icons.description_outlined,
+              maxLines: 3,
+            ),
+
             const SizedBox(height: AppSpacing.sectionGap),
             _buildSectionTitle('Parameters Included'),
             _buildListEditor('Parameter', _parameters, _paramController),
-            
+
             const SizedBox(height: AppSpacing.sectionGap),
             _buildSectionTitle('Precautions'),
             _buildListEditor('Precaution', _precautions, _precautionController),
-            
+
             const SizedBox(height: AppSpacing.sectionGap),
             _buildSectionTitle('Collection & Delivery'),
-            _buildTextField(_sampleTypeController, 'Sample Type', Icons.bloodtype_outlined),
+            _buildTextField(
+              _sampleTypeController,
+              'Sample Type',
+              Icons.bloodtype_outlined,
+            ),
             const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(_sampleTimeController, 'Sample Collection Time', Icons.timer_outlined),
+            _buildTextField(
+              _sampleTimeController,
+              'Sample Collection Time',
+              Icons.timer_outlined,
+            ),
             const SizedBox(height: AppSpacing.elementGap),
-            _buildTextField(_deliveryTimeController, 'Report Delivery Time', Icons.local_shipping_outlined),
-            
+            _buildTextField(
+              _deliveryTimeController,
+              'Report Delivery Time',
+              Icons.local_shipping_outlined,
+            ),
+
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: _saveTest,
@@ -161,14 +242,17 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
   Widget _buildSectionTitle(String title) {
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.elementGap),
-      child: Text(
-        title,
-        style: AppTextStyles.cardTitle,
-      ),
+      child: Text(title, style: AppTextStyles.cardTitle),
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label, IconData icon, {bool isNumeric = false, int maxLines = 1}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String label,
+    IconData icon, {
+    bool isNumeric = false,
+    int maxLines = 1,
+  }) {
     return TextFormField(
       controller: controller,
       keyboardType: isNumeric ? TextInputType.number : TextInputType.text,
@@ -192,7 +276,11 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
     );
   }
 
-  Widget _buildListEditor(String label, List<String> list, TextEditingController controller) {
+  Widget _buildListEditor(
+    String label,
+    List<String> list,
+    TextEditingController controller,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -202,14 +290,16 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
               child: TextFormField(
                 controller: controller,
                 style: AppTextStyles.description,
-                decoration: InputDecoration(
-                  labelText: 'Add $label',
-                ),
+                decoration: InputDecoration(labelText: 'Add $label'),
               ),
             ),
             const SizedBox(width: AppSpacing.elementGap),
             IconButton(
-              icon: const Icon(Icons.add_circle, color: AppColors.primary, size: 32),
+              icon: const Icon(
+                Icons.add_circle,
+                color: AppColors.primary,
+                size: 32,
+              ),
               onPressed: () {
                 if (controller.text.isNotEmpty) {
                   setState(() {
@@ -240,7 +330,7 @@ class _CreateEditTestScreenState extends ConsumerState<CreateEditTestScreen> {
               ),
             ),
           );
-        }).toList(),
+        }),
       ],
     );
   }

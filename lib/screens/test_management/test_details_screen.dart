@@ -16,6 +16,11 @@ class TestDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final updatedTest = ref.watch(testProvider).firstWhere(
+      (t) => t.id == test.id,
+      orElse: () => test,
+    );
+
     return Scaffold(
       backgroundColor: AppColors.background,
       appBar: AppBar(
@@ -26,20 +31,14 @@ class TestDetailsScreen extends ConsumerWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Test Details', style: AppTextStyles.subHeader.copyWith(fontSize: 20)),
-            Text(test.name, style: AppTextStyles.caption),
+            Text(updatedTest.name, style: AppTextStyles.caption),
           ],
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit_outlined, color: AppColors.primary),
-            onPressed: () {
-              context.push('/create-edit-test', extra: test);
-            },
-          ),
-          IconButton(
             icon: const Icon(Icons.delete_outline, color: AppColors.error),
             onPressed: () {
-              _showDeleteConfirmation(context, ref);
+              _showDeleteConfirmation(context, ref, updatedTest);
             },
           ),
         ],
@@ -48,22 +47,22 @@ class TestDetailsScreen extends ConsumerWidget {
         padding: const EdgeInsets.only(bottom: AppSpacing.sectionGap),
         child: Column(
           children: [
-            TestHeaderCard(test: test),
-            TestDescriptionCard(test: test),
-            TestPrecautionsCard(test: test),
-            TestCollectionDeliveryCard(test: test),
+            TestHeaderCard(test: updatedTest),
+            TestDescriptionCard(test: updatedTest),
+            TestPrecautionsCard(test: updatedTest),
+            TestCollectionDeliveryCard(test: updatedTest),
           ],
         ),
       ),
     );
   }
 
-  void _showDeleteConfirmation(BuildContext context, WidgetRef ref) {
+  void _showDeleteConfirmation(BuildContext context, WidgetRef ref, LabTest currentTest) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Lab Test', style: AppTextStyles.cardTitle),
-        content: Text('Are you sure you want to delete ${test.name}?', style: AppTextStyles.description),
+        content: Text('Are you sure you want to delete ${currentTest.name}?', style: AppTextStyles.description),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSpacing.cardRadius)),
         actions: [
           TextButton(
@@ -72,11 +71,11 @@ class TestDetailsScreen extends ConsumerWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              ref.read(testProvider.notifier).deleteTest(test.id);
+              ref.read(testProvider.notifier).deleteTest(currentTest.id);
               Navigator.pop(context);
               context.pop(); // Go back to management screen
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('${test.name} deleted successfully')),
+                SnackBar(content: Text('${currentTest.name} deleted successfully')),
               );
             },
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
