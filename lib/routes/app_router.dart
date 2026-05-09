@@ -1,7 +1,8 @@
 import 'package:go_router/go_router.dart';
 import '../screens/auth/splash_screen.dart';
 import '../screens/auth/login_screen.dart';
-import '../screens/earning/customer_earning_details_screen.dart';
+import '../screens/earning/customer_earning_details_screen.dart'
+    show EarningDetailsScreen;
 import '../screens/test_management/test_management_screen.dart';
 import '../screens/test_management/test_details_screen.dart';
 import '../screens/test_management/create_edit_test_screen.dart';
@@ -17,9 +18,13 @@ import '../screens/settings/settings_screen.dart';
 import '../screens/settings/about_us_screen.dart';
 import '../screens/settings/terms_conditions_screen.dart';
 import '../screens/settings/privacy_policy_screen.dart';
+import '../screens/medicine_mangement/medicine_mangement_screen.dart';
+import '../screens/medicine_mangement/medicine_details_screen.dart';
+import '../screens/medicine_mangement/add_medicine_inventory_screen.dart';
 import '../models/test.dart';
 import '../models/package.dart';
 import '../models/earning.dart';
+import '../models/medicine.dart';
 
 class AppRouter {
   static const String splash = '/';
@@ -32,6 +37,9 @@ class AppRouter {
   static const String earnings = '/payments';
   static const String companyEarnings = '/company-earnings';
   static const String earningDetails = '/earning-details';
+  static const String medicineManagement = '/medicine-management';
+  static const String medicineDetails = '/medicine-details';
+  static const String addMedicineInventory = '/add-medicine-inventory';
   static const String createEditTest = '/create-edit-test';
   static const String packageManagement = '/package-management';
   static const String packageDetails = '/package-details';
@@ -108,6 +116,21 @@ class AppRouter {
           final earning = state.extra as Earning;
           return EarningDetailsScreen(earning: earning);
         },
+      ),
+      GoRoute(
+        path: medicineManagement,
+        builder: (context, state) => const MedicineManagementScreen(),
+      ),
+      GoRoute(
+        path: medicineDetails,
+        builder: (context, state) {
+          final medicine = state.extra as Medicine;
+          return MedicineDetailsScreen(medicine: medicine);
+        },
+      ),
+      GoRoute(
+        path: addMedicineInventory,
+        builder: (context, state) => const AddMedicineInventoryScreen(),
       ),
       GoRoute(
         path: settings,

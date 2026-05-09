@@ -66,6 +66,12 @@ class SideNavBar extends ConsumerWidget {
                   onTap: () => _navigateTo(context, '/payments'),
                   isSelected: currentPath == '/payments',
                 ),
+                _NavTile(
+                  icon: IconsaxPlusLinear.health,
+                  label: 'Medicine Management',
+                  onTap: () => _navigateTo(context, '/medicine-management'),
+                  isSelected: currentPath == '/medicine-management',
+                ),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 16),
                   child: Divider(color: AppColors.divider),

@@ -165,9 +165,12 @@ class CompanyEarningHistoryScreen extends StatelessWidget {
                   );
                   if (range != null) {
                     // Logic to handle downloaded report for range
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text('Downloading report for ${range.start.day}/${range.start.month} - ${range.end.day}/${range.end.month}'),
+                        content: Text(
+                          'Downloading report for ${range.start.day}/${range.start.month} - ${range.end.day}/${range.end.month}',
+                        ),
                         backgroundColor: AppColors.primaryAccent,
                       ),
                     );
