@@ -12,6 +12,7 @@ import '../screens/dashboard/dashboard_screen.dart';
 import '../screens/package_management/package_management_screen.dart';
 import '../screens/package_management/package_details_screen.dart';
 import '../screens/package_management/create_package_screen.dart';
+import '../screens/settings/settings_screen.dart';
 import '../models/test.dart';
 import '../models/package.dart';
 import '../models/earning.dart';
@@ -30,6 +31,7 @@ class AppRouter {
   static const String packageManagement = '/package-management';
   static const String packageDetails = '/package-details';
   static const String createPackage = '/create-package';
+  static const String settings = '/settings';
   static final router = GoRouter(
     initialLocation: splash,
     routes: [
@@ -94,6 +96,10 @@ class AppRouter {
           final earning = state.extra as Earning;
           return EarningDetailsScreen(earning: earning);
         },
+      ),
+      GoRoute(
+        path: settings,
+        builder: (context, state) => const SettingsScreen(),
       ),
     ],
   );
