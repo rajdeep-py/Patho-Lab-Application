@@ -39,7 +39,7 @@ class SettingsScreen extends ConsumerWidget {
                   tagline: 'Learn more about Patho Lab',
                   icon: IconsaxPlusLinear.info_circle,
                   onTap: () {
-                    // Navigate or show bottom sheet
+                    context.push('/about-us');
                   },
                 ).animate().fadeIn(duration: 400.ms, delay: 50.ms).slideY(begin: 0.1),
                 SettingsCard(

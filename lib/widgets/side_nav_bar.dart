@@ -56,7 +56,7 @@ class SideNavBar extends ConsumerWidget {
                 ),
                 _NavTile(
                   icon: IconsaxPlusLinear.calendar_tick,
-                  label: 'Test Bookings',
+                  label: 'Order Management',
                   onTap: () => _navigateTo(context, '/bookings'),
                   isSelected: currentPath == '/bookings',
                 ),

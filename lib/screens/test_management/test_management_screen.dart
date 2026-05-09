@@ -20,8 +20,8 @@ class TestManagementScreen extends ConsumerWidget {
       backgroundColor: AppColors.background,
       drawer: const SideNavBar(),
       appBar: CustomAppBar(
-        title: 'Test Management',
-        subtitle: 'Manage all lab tests',
+        title: 'Order Management',
+        subtitle: 'Manage all lab tests bookings',
         showMenuButton: true,
         actions: [
           IconButton(
