@@ -83,6 +83,15 @@ class _CompanyEarningCardState extends State<CompanyEarningCard> {
                     _StatusTag(isCredit: widget.isCredit),
                   ],
                 ),
+                const SizedBox(width: 16),
+                IconButton(
+                  onPressed: () {
+                    // Logic to download bill
+                  },
+                  icon: const Icon(IconsaxPlusLinear.document_download, size: 20, color: AppColors.primaryAccent),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
               ],
             ),
           ),

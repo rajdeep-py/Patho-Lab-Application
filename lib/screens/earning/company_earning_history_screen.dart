@@ -37,9 +37,7 @@ class CompanyEarningHistoryScreen extends StatelessWidget {
         'amount': 28500.00,
         'isCredit': true,
         'date': DateTime.now().subtract(const Duration(days: 7)),
-        'breakdown': {
-          'Weekly Settlement': 28500.00,
-        },
+        'breakdown': {'Weekly Settlement': 28500.00},
       },
     ];
 
@@ -51,8 +49,11 @@ class CompanyEarningHistoryScreen extends StatelessWidget {
         showBackButton: true,
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(IconsaxPlusLinear.export_1, color: AppColors.textPrimary),
+            onPressed: () => _showDownloadOptions(context),
+            icon: const Icon(
+              IconsaxPlusLinear.document_download,
+              color: AppColors.textPrimary,
+            ),
           ),
           const SizedBox(width: 8),
         ],
@@ -70,6 +71,150 @@ class CompanyEarningHistoryScreen extends StatelessWidget {
             breakdown: item['breakdown'] as Map<String, double>,
           );
         },
+      ),
+    );
+  }
+
+  void _showDownloadOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.8,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
+        ),
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 12),
+              Center(
+                child: Container(
+                  width: 40,
+                  height: 4,
+                  decoration: BoxDecoration(
+                    color: AppColors.divider,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 24),
+              Text(
+                'Download Statement',
+                style: AppTextStyles.subHeader.copyWith(fontSize: 20),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Select the duration for your financial report',
+                style: AppTextStyles.description.copyWith(fontSize: 14),
+              ),
+              const SizedBox(height: 24),
+              _DownloadOption(
+                title: 'Daily Report',
+                subtitle: 'Statement for the current day',
+                icon: IconsaxPlusLinear.calendar,
+                onTap: () => Navigator.pop(context),
+              ),
+              _DownloadOption(
+                title: 'Weekly Report',
+                subtitle: 'Summary of the last 7 days',
+                icon: IconsaxPlusLinear.calendar_1,
+                onTap: () => Navigator.pop(context),
+              ),
+              _DownloadOption(
+                title: 'Monthly Report',
+                subtitle: 'Complete monthly transaction list',
+                icon: IconsaxPlusLinear.calendar_2,
+                onTap: () => Navigator.pop(context),
+              ),
+              _DownloadOption(
+                title: 'Yearly Report',
+                subtitle: 'Annual settlement overview',
+                icon: IconsaxPlusLinear.calendar_tick,
+                onTap: () => Navigator.pop(context),
+              ),
+              _DownloadOption(
+                title: 'Custom Report',
+                subtitle: 'Select a custom date range',
+                icon: IconsaxPlusLinear.calendar_add,
+                onTap: () async {
+                  Navigator.pop(context); // Close bottom sheet
+                  final DateTimeRange? range = await showDateRangePicker(
+                    context: context,
+                    firstDate: DateTime(2020),
+                    lastDate: DateTime.now(),
+                    builder: (context, child) {
+                      return Theme(
+                        data: Theme.of(context).copyWith(
+                          colorScheme: ColorScheme.light(
+                            primary: AppColors.primaryAccent,
+                            onPrimary: Colors.white,
+                            onSurface: AppColors.textPrimary,
+                          ),
+                        ),
+                        child: child!,
+                      );
+                    },
+                  );
+                  if (range != null) {
+                    // Logic to handle downloaded report for range
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Downloading report for ${range.start.day}/${range.start.month} - ${range.end.day}/${range.end.month}'),
+                        backgroundColor: AppColors.primaryAccent,
+                      ),
+                    );
+                  }
+                },
+              ),
+              const SizedBox(height: 32),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DownloadOption extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const _DownloadOption({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      onTap: onTap,
+      contentPadding: const EdgeInsets.symmetric(vertical: 8),
+      leading: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.primaryAccent.withAlpha(20),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: AppColors.primaryAccent, size: 24),
+      ),
+      title: Text(title, style: AppTextStyles.cardTitle.copyWith(fontSize: 16)),
+      subtitle: Text(subtitle, style: AppTextStyles.caption),
+      trailing: const Icon(
+        IconsaxPlusLinear.arrow_right_3,
+        size: 18,
+        color: AppColors.textTertiary,
       ),
     );
   }

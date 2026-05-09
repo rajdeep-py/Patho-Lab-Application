@@ -78,6 +78,15 @@ class EarningCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(width: 8),
+                IconButton(
+                  onPressed: () {
+                    // Logic to download bill
+                  },
+                  icon: const Icon(IconsaxPlusLinear.document_download, size: 20, color: AppColors.primaryAccent),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+                const SizedBox(width: 8),
                 const Icon(IconsaxPlusLinear.arrow_right_3, size: 16, color: AppColors.textTertiary),
               ],
             ),
