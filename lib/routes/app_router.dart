@@ -14,6 +14,8 @@ import '../screens/package_management/package_details_screen.dart';
 import '../screens/package_management/create_package_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/settings/about_us_screen.dart';
+import '../screens/settings/terms_conditions_screen.dart';
+import '../screens/settings/privacy_policy_screen.dart';
 import '../models/test.dart';
 import '../models/package.dart';
 import '../models/earning.dart';
@@ -34,6 +36,8 @@ class AppRouter {
   static const String createPackage = '/create-package';
   static const String settings = '/settings';
   static const String aboutUs = '/about-us';
+  static const String termsConditions = '/terms-conditions';
+  static const String privacyPolicy = '/privacy-policy';
   static final router = GoRouter(
     initialLocation: splash,
     routes: [
@@ -106,6 +110,14 @@ class AppRouter {
       GoRoute(
         path: aboutUs,
         builder: (context, state) => const AboutUsScreen(),
+      ),
+      GoRoute(
+        path: termsConditions,
+        builder: (context, state) => const TermsConditionsScreen(),
+      ),
+      GoRoute(
+        path: privacyPolicy,
+        builder: (context, state) => const PrivacyPolicyScreen(),
       ),
     ],
   );

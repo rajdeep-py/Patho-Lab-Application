@@ -46,13 +46,17 @@ class SettingsScreen extends ConsumerWidget {
                   optionName: 'Terms and Conditions',
                   tagline: 'Read our terms of service',
                   icon: IconsaxPlusLinear.document_text_1,
-                  onTap: () {},
+                  onTap: () {
+                    context.push('/terms-conditions');
+                  },
                 ).animate().fadeIn(duration: 400.ms, delay: 100.ms).slideY(begin: 0.1),
                 SettingsCard(
                   optionName: 'Privacy and Policy',
                   tagline: 'How we handle your data',
                   icon: IconsaxPlusLinear.shield_tick,
-                  onTap: () {},
+                  onTap: () {
+                    context.push('/privacy-policy');
+                  },
                 ).animate().fadeIn(duration: 400.ms, delay: 150.ms).slideY(begin: 0.1),
                 
                 const SizedBox(height: AppSpacing.sectionGap),
